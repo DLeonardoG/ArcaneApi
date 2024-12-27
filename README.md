@@ -28,3 +28,17 @@ Seed accounts:
 Copy `.env.example` to `.env` if needed. Local Docker Postgres is mapped to **localhost:5433** (to avoid clashing with other Postgres installs on 5432).
 
 ## Deploy (Vercel + Neon)
+
+1. Create a Neon Postgres database and copy `DATABASE_URL`.
+2. Import the GitHub repo into Vercel.
+3. Set env vars: `DATABASE_URL`, `AUTH_SECRET`, `AUTH_TRUST_HOST=true`.
+4. Deploy. Then run migrations/seed once:
+
+```bash
+pnpm exec prisma db push
+pnpm db:seed
+```
+
+(or `prisma migrate deploy` once you add migration history in CI).
+
+## Scripts

@@ -42,3 +42,15 @@ pnpm db:seed
 (or `prisma migrate deploy` once you add migration history in CI).
 
 ## Scripts
+
+| Command | Purpose |
+|---------|---------|
+| `pnpm dev` | Dev server |
+| `pnpm build` | Production build |
+| `pnpm db:up` | Start Postgres via Docker |
+| `pnpm db:setup` | Push schema + seed |
+| `pnpm history:build` | Generate simulated commit history |
+
+## Note
+
+Unofficial fan archive. No ownership of Arcane / Riot IP is claimed.

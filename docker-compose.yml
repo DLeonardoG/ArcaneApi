@@ -6,3 +6,7 @@ services:
       - "5433:5432"
     environment:
       POSTGRES_USER: lorevault
+      POSTGRES_PASSWORD: lorevault
+      POSTGRES_DB: lorevault
+    volumes:
+      - lorevault_pg:/var/lib/postgresql/data

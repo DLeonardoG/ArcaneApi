@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  EDITOR
+  ADMIN
+}
+
+enum FavoriteTarget {
+  CHARACTER
+  EPISODE
+  LOCATION
+  FACTION
+  ARTICLE
+}
+
+model User {
+  id           String     @id @default(cuid())
+  name         String?
+  email        String     @unique
+  passwordHash String?
+  image        String?
+  role         Role       @default(USER)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  accounts     Account[]
+  sessions     Session[]
+  favorites    Favorite[]
+  articles     Article[]  @relation("ArticleAuthor")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text

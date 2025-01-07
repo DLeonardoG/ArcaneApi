@@ -90,3 +90,49 @@ model Universe {
 model Character {
   id          String   @id @default(cuid())
   universeId  String
+  slug        String
+  name        String
+  title       String?
+  summary     String   @db.Text
+  bio         String   @db.Text
+  allegiances String[]
+  imageHint   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  universe    Universe @relation(fields: [universeId], references: [id], onDelete: Cascade)
+
+  @@unique([universeId, slug])
+  @@index([name])
+}
+
+model Faction {
+  id          String   @id @default(cuid())
+  universeId  String
+  slug        String
+  name        String
+  summary     String   @db.Text
+  description String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  universe    Universe @relation(fields: [universeId], references: [id], onDelete: Cascade)
+
+  @@unique([universeId, slug])
+}
+
+model Location {
+  id          String   @id @default(cuid())
+  universeId  String
+  slug        String
+  name        String
+  region      String?
+  summary     String   @db.Text
+  description String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  universe    Universe @relation(fields: [universeId], references: [id], onDelete: Cascade)
+
+  @@unique([universeId, slug])
+}
+
+model Episode {
+  id          String   @id @default(cuid())

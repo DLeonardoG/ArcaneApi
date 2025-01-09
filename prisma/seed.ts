@@ -91,3 +91,33 @@ async function main() {
         universeId_slug: { universeId: arcane.id, slug: episode.slug },
       },
       update: episode,
+      create: { ...episode, universeId: arcane.id },
+    });
+  }
+
+  for (const article of arcaneArticles) {
+    await prisma.article.upsert({
+      where: {
+        universeId_slug: { universeId: arcane.id, slug: article.slug },
+      },
+      update: { ...article, authorId: editor.id },
+      create: {
+        ...article,
+        universeId: arcane.id,
+        authorId: editor.id,
+        published: true,
+      },
+    });
+  }
+
+  console.log(`Seeded LoreVault. Admin: ${admin.email} / lorevault123`);
+}
+
+main()
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

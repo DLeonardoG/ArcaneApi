@@ -267,3 +267,93 @@ function ensureCleanSnapshot() {
     fs.rmSync(SNAPSHOT, { recursive: true, force: true });
   }
   fs.mkdirSync(SNAPSHOT, { recursive: true });
+
+  const files = listFiles(ROOT);
+  for (const relative of files) {
+    const from = path.join(ROOT, relative);
+    const to = path.join(SNAPSHOT, relative);
+    fs.mkdirSync(path.dirname(to), { recursive: true });
+    fs.copyFileSync(from, to);
+  }
+  return files;
+}
+
+function wipeTrackedExceptGit() {
+  for (const entry of fs.readdirSync(ROOT)) {
+    if (
+      entry === ".git" ||
+      entry === "node_modules" ||
+      entry === ".env"
+    ) {
+      continue;
+    }
+    fs.rmSync(path.join(ROOT, entry), { recursive: true, force: true });
+  }
+}
+
+function writeOpFiles(op: Op) {
+  for (const file of op.files) {
+    const absolute = path.join(ROOT, file.relative);
+    fs.mkdirSync(path.dirname(absolute), { recursive: true });
+    fs.writeFileSync(absolute, file.content);
+  }
+  // Keep ignore rules authoritative after every write
+  fs.writeFileSync(path.join(ROOT, ".gitignore"), PROTECTIVE_GITIGNORE);
+}
+
+function isoWithOffset(date: Date): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const y = date.getFullYear();
+  const m = pad(date.getMonth() + 1);
+  const d = pad(date.getDate());
+  const hh = pad(date.getHours());
+  const mm = pad(date.getMinutes());
+  const ss = pad(date.getSeconds());
+  return `${y}-${m}-${d}T${hh}:${mm}:${ss}-05:00`;
+}
+
+function main() {
+  const first = gitOut(["rev-list", "--max-parents=0", "HEAD"]);
+  console.log(`Root commit: ${first}`);
+  console.log(`Snapshotting final tree to ${SNAPSHOT}...`);
+  const files = ensureCleanSnapshot();
+  const calendar = buildCalendar();
+  console.log(`Files: ${files.length}; commit slots: ${calendar.length}`);
+
+  const ops = buildOps(files, calendar.length);
+  console.log(`Operations prepared: ${ops.length}`);
+
+  console.log("Resetting to root commit...");
+  git(["reset", "--hard", first]);
+  wipeTrackedExceptGit();
+  fs.writeFileSync(path.join(ROOT, ".gitignore"), PROTECTIVE_GITIGNORE);
+
+  let made = 0;
+  for (let i = 0; i < ops.length; i++) {
+    const op = ops[i];
+    const when = isoWithOffset(calendar[i]);
+    writeOpFiles(op);
+    git(["-c", "advice.addIgnoredFile=false", "add", "-A"]);
+    const status = gitOut(["status", "--porcelain"]);
+    if (!status) {
+      continue;
+    }
+    // Safety: never commit secrets or snapshot dirs
+    if (status.includes(".env\n") || status.includes(".lorevault-final")) {
+      throw new Error(`Refusing to commit sensitive/ignored paths:\n${status}`);
+    }
+    git(["commit", "-m", op.message], {
+      GIT_AUTHOR_DATE: when,
+      GIT_COMMITTER_DATE: when,
+    });
+    made += 1;
+    if (made % 50 === 0) {
+      console.log(`Committed ${made}/${ops.length}`);
+    }
+  }
+
+  console.log(`History build complete. Commits created: ${made}`);
+  console.log("Re-install if needed: pnpm install");
+}
+
+main();

@@ -88,3 +88,93 @@ function buildCalendar(): Date[] {
       dates.push(stamp);
     }
     cursor.setDate(cursor.getDate() + 1);
+  }
+  return dates;
+}
+
+function phaseMessage(index: number, total: number, fileHint: string): string {
+  const progress = index / total;
+  const file = fileHint.split("/").pop() ?? fileHint;
+
+  if (progress < 0.12) {
+    const pool = [
+      `chore: bootstrap ${file}`,
+      `chore: wire project config for ${file}`,
+      `style: early layout pass on ${file}`,
+      `docs: note setup for ${file}`,
+    ];
+    return pool[index % pool.length];
+  }
+  if (progress < 0.28) {
+    const pool = [
+      `feat: add universe model touch ${file}`,
+      `feat: scaffold character surfaces via ${file}`,
+      `refactor: tidy data layer around ${file}`,
+      `chore: prisma-related update ${file}`,
+    ];
+    return pool[index % pool.length];
+  }
+  if (progress < 0.45) {
+    const pool = [
+      `feat: episode archive work in ${file}`,
+      `feat: location lore updates ${file}`,
+      `feat: seed arcane content via ${file}`,
+      `fix: correct synopsis copy in ${file}`,
+    ];
+    return pool[index % pool.length];
+  }
+  if (progress < 0.6) {
+    const pool = [
+      `feat: auth plumbing in ${file}`,
+      `feat: profile favorites via ${file}`,
+      `fix: session callback hardening ${file}`,
+      `chore: credential form polish ${file}`,
+    ];
+    return pool[index % pool.length];
+  }
+  if (progress < 0.75) {
+    const pool = [
+      `feat: wiki article flow ${file}`,
+      `feat: editor desk updates ${file}`,
+      `feat: search indexing path ${file}`,
+      `docs: article authoring notes ${file}`,
+    ];
+    return pool[index % pool.length];
+  }
+  if (progress < 0.9) {
+    const pool = [
+      `feat: multi-universe hub polish ${file}`,
+      `style: cinematic theme pass ${file}`,
+      `perf: dynamic route metadata ${file}`,
+      `refactor: shared entity cards ${file}`,
+    ];
+    return pool[index % pool.length];
+  }
+  const pool = [
+    `docs: readme and deploy notes ${file}`,
+    `chore: vercel config tweak ${file}`,
+    `fix: late polish on ${file}`,
+    `test: smoke-friendly structure ${file}`,
+  ];
+  return pool[index % pool.length];
+}
+
+function chunkBuffer(content: Buffer, parts: number): Buffer[] {
+  if (parts <= 1) return [content];
+  const text = content.toString("utf8");
+  if (text.includes("\u0000")) {
+    return [content];
+  }
+  const lines = text.split("\n");
+  if (lines.length < parts) {
+    return Array.from({ length: parts }, (_, i) =>
+      Buffer.from(
+        i === parts - 1
+          ? text
+          : text.slice(
+              0,
+              Math.max(1, Math.floor(text.length * ((i + 1) / parts))),
+            ),
+        "utf8",
+      ),
+    );

@@ -178,3 +178,92 @@ function chunkBuffer(content: Buffer, parts: number): Buffer[] {
         "utf8",
       ),
     );
+  }
+  const size = Math.ceil(lines.length / parts);
+  const chunks: Buffer[] = [];
+  for (let i = 0; i < parts; i++) {
+    chunks.push(
+      Buffer.from(
+        lines.slice(0, Math.min(lines.length, size * (i + 1))).join("\n"),
+        "utf8",
+      ),
+    );
+  }
+  return chunks;
+}
+
+function buildOps(files: string[], slotCount: number): Op[] {
+  const ops: Op[] = [];
+  const perFile = Math.max(1, Math.ceil(slotCount / Math.max(files.length, 1)));
+
+  for (const relative of files) {
+    const absolute = path.join(SNAPSHOT, relative);
+    const content = fs.readFileSync(absolute);
+    const chunks = chunkBuffer(content, Math.min(perFile, 4));
+    for (const chunk of chunks) {
+      ops.push({
+        message: "",
+        files: [{ relative, content: chunk }],
+      });
+    }
+  }
+
+  let pad = 0;
+  while (ops.length < slotCount) {
+    pad += 1;
+    const note = "docs/changelog-sim.md";
+    const prev =
+      ops
+        .slice()
+        .reverse()
+        .find((op) => op.files.some((f) => f.relative === note))
+        ?.files.find((f) => f.relative === note)
+        ?.content.toString("utf8") ?? "# LoreVault simulated changelog\n\n";
+    ops.push({
+      message: "",
+      files: [
+        {
+          relative: note,
+          content: Buffer.from(`${prev}- polish pass ${pad}\n`, "utf8"),
+        },
+      ],
+    });
+  }
+
+  if (ops.length > slotCount) {
+    const head = ops.slice(0, slotCount - 1);
+    const tail = ops.slice(slotCount - 1);
+    const mergedFiles = new Map<string, Buffer>();
+    for (const op of tail) {
+      for (const file of op.files) {
+        mergedFiles.set(file.relative, file.content);
+      }
+    }
+    head.push({
+      message: "",
+      files: [...mergedFiles.entries()].map(([relative, content]) => ({
+        relative,
+        content,
+      })),
+    });
+    return head.map((op, index) => ({
+      ...op,
+      message: phaseMessage(
+        index,
+        slotCount,
+        op.files[0]?.relative ?? "project",
+      ),
+    }));
+  }
+
+  return ops.map((op, index) => ({
+    ...op,
+    message: phaseMessage(index, slotCount, op.files[0]?.relative ?? "project"),
+  }));
+}
+
+function ensureCleanSnapshot() {
+  if (fs.existsSync(SNAPSHOT)) {
+    fs.rmSync(SNAPSHOT, { recursive: true, force: true });
+  }
+  fs.mkdirSync(SNAPSHOT, { recursive: true });

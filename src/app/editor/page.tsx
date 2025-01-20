@@ -32,3 +32,20 @@ export default async function EditorPage() {
               <option key={universe.id} value={universe.slug}>
                 {universe.name}
               </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Title
+          <input name="title" required minLength={3} />
+        </label>
+        <label>
+          Slug
+          <input
+            name="slug"
+            required
+            pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            placeholder="hextech-and-power"
+          />
+        </label>
+        <label>

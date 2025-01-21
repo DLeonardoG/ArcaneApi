@@ -49,3 +49,17 @@ export default async function EditorPage() {
           />
         </label>
         <label>
+          Summary
+          <textarea name="summary" required rows={3} minLength={10} />
+        </label>
+        <label>
+          Body (markdown-lite)
+          <textarea name="body" required rows={10} minLength={20} />
+        </label>
+        <button className="btn btn-primary" type="submit">
+          Publish article
+        </button>
+      </form>
+    </div>
+  );
+}

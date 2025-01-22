@@ -88,3 +88,93 @@ a {
 }
 
 .link-button {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hero {
+  position: relative;
+  min-height: 88vh;
+  display: grid;
+  align-items: end;
+  padding: 6rem 0 4rem;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 20%, rgba(7, 9, 15, 0.75) 70%, var(--bg-deep) 100%),
+    radial-gradient(circle at 70% 30%, rgba(125, 211, 192, 0.25), transparent 40%),
+    radial-gradient(circle at 20% 70%, rgba(224, 122, 95, 0.18), transparent 35%);
+  animation: drift 14s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  max-width: 40rem;
+}
+
+.hero__brand {
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 10vw, 6.5rem);
+  line-height: 0.92;
+  margin: 0 0 1rem;
+  color: var(--ink);
+  animation: rise 1s ease both;
+}
+
+.hero__lead {
+  color: var(--muted);
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 0 0 1.75rem;
+  animation: rise 1s ease 0.12s both;
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  animation: rise 1s ease 0.22s both;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ink);
+  padding: 0.7rem 1.1rem;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, rgba(125, 211, 192, 0.25), rgba(201, 162, 39, 0.18));
+  border-color: rgba(125, 211, 192, 0.55);
+}
+
+.btn-active {
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+}
+
+.section {
+  padding: 3.5rem 0;
+}

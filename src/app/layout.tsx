@@ -7,3 +7,12 @@ export const metadata: Metadata = {
     default: "LoreVault",
     template: "%s · LoreVault",
   },
+  description:
+    "A multi-saga fan wiki. Start with Arcane, then archive every universe you love.",
+};
+
+export const dynamic = "force-dynamic";
+
+export default function RootLayout({
+  children,
+}: Readonly<{

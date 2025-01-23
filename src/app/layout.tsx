@@ -16,3 +16,12 @@ export const dynamic = "force-dynamic";
 export default function RootLayout({
   children,
 }: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body className="antialiased">
+        <SiteHeader />
+        <main>{children}</main>
+        <footer className="footer">
+          <div className="shell">

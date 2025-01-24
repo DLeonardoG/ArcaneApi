@@ -25,3 +25,11 @@ export default function RootLayout({
         <main>{children}</main>
         <footer className="footer">
           <div className="shell">
+            LoreVault is a fan-made archive. Unofficial. Built for obsessed
+            readers.
+          </div>
+        </footer>
+      </body>
+    </html>
+  );
+}

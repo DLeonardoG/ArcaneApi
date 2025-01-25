@@ -8,3 +8,8 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <div className="shell">
+      <div className="page-hero">
+        <h1>Sign in</h1>
+        <p>Return to your shelf of favorites.</p>
+      </div>
+      <LoginForm />

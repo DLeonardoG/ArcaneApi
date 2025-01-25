@@ -13,3 +13,6 @@ export default function LoginPage() {
         <p>Return to your shelf of favorites.</p>
       </div>
       <LoginForm />
+    </div>
+  );
+}

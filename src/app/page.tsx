@@ -46,3 +46,17 @@ export default async function HomePage() {
             />
           ))}
         </div>
+      </section>
+
+      {featured ? (
+        <section className="section shell">
+          <h2>Now reading: {featured.name}</h2>
+          <p className="section__lead">{featured.description}</p>
+          <Link href={`/u/${featured.slug}`} className="btn btn-primary">
+            Open hub
+          </Link>
+        </section>
+      ) : null}
+    </>
+  );
+}

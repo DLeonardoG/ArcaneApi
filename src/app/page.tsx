@@ -30,3 +30,19 @@ export default async function HomePage() {
 
       <section className="section shell">
         <h2>Universes in the vault</h2>
+        <p className="section__lead">
+          Multi-saga by design. Featured shelves stay lit; placeholder realms
+          wait for the next obsession.
+        </p>
+        <div className="grid-cards">
+          {universes.map((universe) => (
+            <EntityCard
+              key={universe.id}
+              href={`/u/${universe.slug}`}
+              title={universe.name}
+              subtitle={universe.isFeatured ? "Featured" : "Shelf"}
+              summary={universe.tagline}
+              accent={universe.accent}
+            />
+          ))}
+        </div>

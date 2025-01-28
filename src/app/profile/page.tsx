@@ -15,3 +15,20 @@ export default async function ProfilePage() {
 
   const favorites = await prisma.favorite.findMany({
     where: { userId: session.user.id },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const characterIds = favorites
+    .filter((item) => item.targetType === "CHARACTER")
+    .map((item) => item.targetId);
+
+  const characters = characterIds.length
+    ? await prisma.character.findMany({
+        where: { id: { in: characterIds } },
+        include: { universe: { select: { slug: true, name: true } } },
+      })
+    : [];
+
+  return (
+    <div className="shell">
+      <div className="page-hero">

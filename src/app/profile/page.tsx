@@ -49,3 +49,16 @@ export default async function ProfilePage() {
           <ul>
             {characters.map((character) => (
               <li key={character.id}>
+                <Link
+                  href={`/u/${character.universe.slug}/characters/${character.slug}`}
+                >
+                  {character.name} · {character.universe.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
+  );
+}

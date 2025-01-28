@@ -32,3 +32,20 @@ export default async function ProfilePage() {
   return (
     <div className="shell">
       <div className="page-hero">
+        <h1>{session.user.name ?? "Fan"}</h1>
+        <p>
+          {session.user.email} · role {session.user.role}
+        </p>
+      </div>
+      <section className="panel">
+        <h2 style={{ fontFamily: "var(--font-display)", marginTop: 0 }}>
+          Favorite characters
+        </h2>
+        {characters.length === 0 ? (
+          <p style={{ color: "var(--muted)" }}>
+            No favorites yet. Open a character page and hit save.
+          </p>
+        ) : (
+          <ul>
+            {characters.map((character) => (
+              <li key={character.id}>

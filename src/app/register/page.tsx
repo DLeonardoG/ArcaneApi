@@ -8,3 +8,8 @@ export const metadata: Metadata = {
 export default function RegisterPage() {
   return (
     <div className="shell">
+      <div className="page-hero">
+        <h1>Join LoreVault</h1>
+        <p>Save favorites and, if you earn the quill, edit the archive.</p>
+      </div>
+      <RegisterForm />

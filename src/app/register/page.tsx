@@ -13,3 +13,6 @@ export default function RegisterPage() {
         <p>Save favorites and, if you earn the quill, edit the archive.</p>
       </div>
       <RegisterForm />
+    </div>
+  );
+}

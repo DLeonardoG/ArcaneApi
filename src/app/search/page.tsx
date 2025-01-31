@@ -44,3 +44,26 @@ export default async function SearchPage({ searchParams }: Props) {
             items={results.episodes.map((item) => ({
               href: `/u/${item.universe.slug}/episodes/${item.slug}`,
               label: `${item.title} · ${item.universe.name}`,
+            }))}
+          />
+          <ResultBlock
+            title="Locations"
+            items={results.locations.map((item) => ({
+              href: `/u/${item.universe.slug}/locations/${item.slug}`,
+              label: `${item.name} · ${item.universe.name}`,
+            }))}
+          />
+          <ResultBlock
+            title="Articles"
+            items={results.articles.map((item) => ({
+              href: `/u/${item.universe.slug}/articles/${item.slug}`,
+              label: `${item.title} · ${item.universe.name}`,
+            }))}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function ResultBlock({

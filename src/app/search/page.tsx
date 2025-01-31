@@ -67,3 +67,25 @@ export default async function SearchPage({ searchParams }: Props) {
 }
 
 function ResultBlock({
+  title,
+  items,
+}: {
+  title: string;
+  items: { href: string; label: string }[];
+}) {
+  if (!items.length) return null;
+  return (
+    <div style={{ marginBottom: "1.5rem" }}>
+      <h2 style={{ fontFamily: "var(--font-display)", marginBottom: "0.5rem" }}>
+        {title}
+      </h2>
+      <ul>
+        {items.map((item) => (
+          <li key={item.href}>
+            <Link href={item.href}>{item.label}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

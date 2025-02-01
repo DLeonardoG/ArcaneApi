@@ -18,3 +18,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ArticlePage({ params }: Props) {
+  const { universe, slug } = await params;
+  const article = await getArticle(universe, slug);
+  if (!article) notFound();
+
+  return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>{article.title}</h1>
+        <p>{article.summary}</p>
+        <div className="meta-row">

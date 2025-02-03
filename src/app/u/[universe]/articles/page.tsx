@@ -31,3 +31,12 @@ export default async function ArticlesPage({ params }: Props) {
             key={article.id}
             href={`/u/${slug}/articles/${article.slug}`}
             title={article.title}
+            subtitle={article.author?.name ?? "Archive"}
+            summary={article.summary}
+            accent={universe.accent}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

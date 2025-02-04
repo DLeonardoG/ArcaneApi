@@ -16,3 +16,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!character) return { title: "Character" };
   return {
     title: `${character.name} · ${character.universe.name}`,
+    description: character.summary,
+  };
+}
+
+export default async function CharacterPage({ params }: Props) {
+  const { universe, slug } = await params;
+  const character = await getCharacter(universe, slug);
+  if (!character) notFound();
+
+  const session = await auth();
+  let active = false;
+  if (session?.user?.id) {
+    const fav = await prisma.favorite.findUnique({
+      where: {
+        userId_targetType_targetId: {
+          userId: session.user.id,
+          targetType: FavoriteTarget.CHARACTER,
+          targetId: character.id,

@@ -34,3 +34,21 @@ export default async function CharacterPage({ params }: Props) {
           userId: session.user.id,
           targetType: FavoriteTarget.CHARACTER,
           targetId: character.id,
+        },
+      },
+    });
+    active = Boolean(fav);
+  }
+
+  const path = `/u/${universe}/characters/${slug}`;
+
+  return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>{character.name}</h1>
+        <p>{character.summary}</p>
+        <div className="chip-row">
+          {character.allegiances.map((item) => (
+            <span key={item} className="chip">
+              {item}
+            </span>

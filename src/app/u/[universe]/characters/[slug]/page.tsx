@@ -52,3 +52,20 @@ export default async function CharacterPage({ params }: Props) {
             <span key={item} className="chip">
               {item}
             </span>
+          ))}
+        </div>
+        {session?.user ? (
+          <FavoriteButton
+            targetType={FavoriteTarget.CHARACTER}
+            targetId={character.id}
+            path={path}
+            active={active}
+          />
+        ) : null}
+      </div>
+      <article className="panel prose-lite">
+        <p>{character.bio}</p>
+      </article>
+    </div>
+  );
+}

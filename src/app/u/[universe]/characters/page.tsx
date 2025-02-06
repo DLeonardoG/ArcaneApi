@@ -20,3 +20,14 @@ export default async function CharactersPage({ params }: Props) {
   const characters = await getCharacters(slug);
 
   return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>Characters</h1>
+        <p>Faces of {universe.name}.</p>
+      </div>
+      <div className="grid-cards">
+        {characters.map((character) => (
+          <EntityCard
+            key={character.id}
+            href={`/u/${slug}/characters/${character.slug}`}
+            title={character.name}

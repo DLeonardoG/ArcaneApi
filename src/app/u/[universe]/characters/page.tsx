@@ -31,3 +31,12 @@ export default async function CharactersPage({ params }: Props) {
             key={character.id}
             href={`/u/${slug}/characters/${character.slug}`}
             title={character.name}
+            subtitle={character.title ?? undefined}
+            summary={character.summary}
+            accent={universe.accent}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

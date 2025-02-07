@@ -28,3 +28,11 @@ export default async function EpisodePage({ params }: Props) {
         <p>
           Season {episode.season}, Episode {episode.number}
           {episode.airDate ? ` · ${episode.airDate}` : ""}
+        </p>
+      </div>
+      <article className="panel prose-lite">
+        <p>{episode.synopsis}</p>
+      </article>
+    </div>
+  );
+}

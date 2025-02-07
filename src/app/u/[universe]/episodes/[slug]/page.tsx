@@ -18,3 +18,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function EpisodePage({ params }: Props) {
   const { universe, slug } = await params;
+  const episode = await getEpisode(universe, slug);
+  if (!episode) notFound();
+
+  return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>{episode.title}</h1>
+        <p>
+          Season {episode.season}, Episode {episode.number}
+          {episode.airDate ? ` · ${episode.airDate}` : ""}

@@ -31,3 +31,12 @@ export default async function EpisodesPage({ params }: Props) {
             key={episode.id}
             href={`/u/${slug}/episodes/${episode.slug}`}
             title={episode.title}
+            subtitle={`S${episode.season}E${episode.number}`}
+            summary={episode.synopsis}
+            accent={universe.accent}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

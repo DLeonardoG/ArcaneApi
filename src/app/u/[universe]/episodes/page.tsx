@@ -20,3 +20,14 @@ export default async function EpisodesPage({ params }: Props) {
   const episodes = await getEpisodes(slug);
 
   return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>Episodes</h1>
+        <p>Season beats for {universe.name}.</p>
+      </div>
+      <div className="grid-cards">
+        {episodes.map((episode) => (
+          <EntityCard
+            key={episode.id}
+            href={`/u/${slug}/episodes/${episode.slug}`}
+            title={episode.title}

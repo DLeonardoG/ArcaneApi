@@ -15,3 +15,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: faction.summary,
   };
 }
+
+export default async function FactionPage({ params }: Props) {
+  const { universe, slug } = await params;
+  const faction = await getFaction(universe, slug);
+  if (!faction) notFound();
+
+  return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>{faction.name}</h1>

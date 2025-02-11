@@ -25,3 +25,11 @@ export default async function FactionPage({ params }: Props) {
     <div className="shell">
       <div className="page-hero">
         <h1>{faction.name}</h1>
+        <p>{faction.summary}</p>
+      </div>
+      <article className="panel prose-lite">
+        <p>{faction.description}</p>
+      </article>
+    </div>
+  );
+}

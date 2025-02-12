@@ -20,3 +20,14 @@ export default async function FactionsPage({ params }: Props) {
   const factions = await getFactions(slug);
 
   return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>Factions</h1>
+        <p>Powers that shape {universe.name}.</p>
+      </div>
+      <div className="grid-cards">
+        {factions.map((faction) => (
+          <EntityCard
+            key={faction.id}
+            href={`/u/${slug}/factions/${faction.slug}`}
+            title={faction.name}

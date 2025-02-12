@@ -31,3 +31,11 @@ export default async function FactionsPage({ params }: Props) {
             key={faction.id}
             href={`/u/${slug}/factions/${faction.slug}`}
             title={faction.name}
+            summary={faction.summary}
+            accent={universe.accent}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

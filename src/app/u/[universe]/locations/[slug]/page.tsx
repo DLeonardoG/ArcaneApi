@@ -15,3 +15,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: location.summary,
   };
 }
+
+export default async function LocationPage({ params }: Props) {
+  const { universe, slug } = await params;
+  const location = await getLocation(universe, slug);
+  if (!location) notFound();
+
+  return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>{location.name}</h1>

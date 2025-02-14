@@ -20,3 +20,14 @@ export default async function LocationsPage({ params }: Props) {
   const locations = await getLocations(slug);
 
   return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>Locations</h1>
+        <p>Maps and memory of {universe.name}.</p>
+      </div>
+      <div className="grid-cards">
+        {locations.map((location) => (
+          <EntityCard
+            key={location.id}
+            href={`/u/${slug}/locations/${location.slug}`}
+            title={location.name}

@@ -9,3 +9,14 @@ type Props = { params: Promise<{ universe: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { universe: slug } = await params;
+  const universe = await getUniverseBySlug(slug);
+  return { title: universe ? `Locations · ${universe.name}` : "Locations" };
+}
+
+export default async function LocationsPage({ params }: Props) {
+  const { universe: slug } = await params;
+  const universe = await getUniverseBySlug(slug);
+  if (!universe) notFound();
+  const locations = await getLocations(slug);
+
+  return (

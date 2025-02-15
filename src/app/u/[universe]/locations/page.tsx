@@ -31,3 +31,12 @@ export default async function LocationsPage({ params }: Props) {
             key={location.id}
             href={`/u/${slug}/locations/${location.slug}`}
             title={location.name}
+            subtitle={location.region ?? undefined}
+            summary={location.summary}
+            accent={universe.accent}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

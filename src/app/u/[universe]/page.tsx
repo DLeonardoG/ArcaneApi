@@ -26,3 +26,17 @@ export default async function UniverseHubPage({ params }: Props) {
     { href: `/u/${slug}/characters`, label: "Characters", count: universe._count.characters },
     { href: `/u/${slug}/episodes`, label: "Episodes", count: universe._count.episodes },
     { href: `/u/${slug}/locations`, label: "Locations", count: universe._count.locations },
+    { href: `/u/${slug}/factions`, label: "Factions", count: universe._count.factions },
+    { href: `/u/${slug}/articles`, label: "Articles", count: universe._count.articles },
+  ];
+
+  return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1 style={{ color: universe.accent }}>{universe.name}</h1>
+        <p>{universe.description}</p>
+        <div className="meta-row">
+          <span>{universe.tagline}</span>
+        </div>
+      </div>
+      <div className="grid-cards">

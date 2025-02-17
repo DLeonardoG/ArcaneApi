@@ -40,3 +40,14 @@ export default async function UniverseHubPage({ params }: Props) {
         </div>
       </div>
       <div className="grid-cards">
+        {links.map((link) => (
+          <Link key={link.href} href={link.href} className="entity-card">
+            <p className="entity-card__eyebrow">{link.count} entries</p>
+            <h3>{link.label}</h3>
+            <p>Browse the {link.label.toLowerCase()} of {universe.name}.</p>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}

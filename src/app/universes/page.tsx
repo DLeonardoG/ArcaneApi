@@ -25,3 +25,10 @@ export default async function UniversesPage() {
             title={universe.name}
             subtitle={universe.tagline}
             summary={universe.description}
+            accent={universe.accent}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

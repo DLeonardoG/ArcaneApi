@@ -16,3 +16,12 @@ export default async function UniversesPage() {
       <div className="page-hero">
         <h1>Universes</h1>
         <p>Pick a shelf. Arcane is live; other realms are waiting for lore.</p>
+      </div>
+      <div className="grid-cards">
+        {universes.map((universe) => (
+          <EntityCard
+            key={universe.id}
+            href={`/u/${universe.slug}`}
+            title={universe.name}
+            subtitle={universe.tagline}
+            summary={universe.description}

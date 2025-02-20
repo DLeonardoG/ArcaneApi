@@ -32,3 +32,20 @@ export function LoginForm() {
     </form>
   );
 }
+
+export function RegisterForm() {
+  const [state, action, pending] = useActionState(
+    async (_prev: AuthState, formData: FormData) => registerUser(formData),
+    undefined,
+  );
+
+  return (
+    <form className="form-stack panel" action={action}>
+      <label>
+        Display name
+        <input name="name" required minLength={2} />
+      </label>
+      <label>
+        Email
+        <input name="email" type="email" required />
+      </label>

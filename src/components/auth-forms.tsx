@@ -15,3 +15,20 @@ export function LoginForm() {
   return (
     <form className="form-stack panel" action={action}>
       <label>
+        Email
+        <input name="email" type="email" required />
+      </label>
+      <label>
+        Password
+        <input name="password" type="password" required minLength={6} />
+      </label>
+      {state?.error ? <p className="form-error">{state.error}</p> : null}
+      <button className="btn btn-primary" type="submit" disabled={pending}>
+        {pending ? "Signing in..." : "Sign in"}
+      </button>
+      <p style={{ color: "var(--muted)", margin: 0 }}>
+        No account? <Link href="/register">Join LoreVault</Link>
+      </p>
+    </form>
+  );
+}

@@ -49,3 +49,17 @@ export function RegisterForm() {
         Email
         <input name="email" type="email" required />
       </label>
+      <label>
+        Password
+        <input name="password" type="password" required minLength={6} />
+      </label>
+      {state?.error ? <p className="form-error">{state.error}</p> : null}
+      <button className="btn btn-primary" type="submit" disabled={pending}>
+        {pending ? "Creating..." : "Create account"}
+      </button>
+      <p style={{ color: "var(--muted)", margin: 0 }}>
+        Already in? <Link href="/login">Sign in</Link>
+      </p>
+    </form>
+  );
+}

@@ -5,3 +5,10 @@ export function EntityCard({
   title,
   subtitle,
   summary,
+  accent,
+}: {
+  href: string;
+  title: string;
+  subtitle?: string;
+  summary: string;
+  accent?: string;

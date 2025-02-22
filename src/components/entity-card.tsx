@@ -19,3 +19,9 @@ export function EntityCard({
       className="entity-card"
       style={accent ? ({ ["--card-accent" as string]: accent } as React.CSSProperties) : undefined}
     >
+      {subtitle ? <p className="entity-card__eyebrow">{subtitle}</p> : null}
+      <h3>{title}</h3>
+      <p>{summary}</p>
+    </Link>
+  );
+}

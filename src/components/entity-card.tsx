@@ -12,3 +12,10 @@ export function EntityCard({
   subtitle?: string;
   summary: string;
   accent?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="entity-card"
+      style={accent ? ({ ["--card-accent" as string]: accent } as React.CSSProperties) : undefined}
+    >

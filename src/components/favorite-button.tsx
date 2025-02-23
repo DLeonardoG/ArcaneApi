@@ -5,3 +5,10 @@ export function FavoriteButton({
   targetType,
   targetId,
   path,
+  active,
+}: {
+  targetType: FavoriteTarget;
+  targetId: string;
+  path: string;
+  active: boolean;
+}) {

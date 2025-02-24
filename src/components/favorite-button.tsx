@@ -19,3 +19,6 @@ export function FavoriteButton({
       <button type="submit" className={active ? "btn btn-active" : "btn"}>
         {active ? "Saved" : "Save favorite"}
       </button>
+    </form>
+  );
+}

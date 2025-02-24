@@ -12,3 +12,10 @@ export function FavoriteButton({
   path: string;
   active: boolean;
 }) {
+  const action = toggleFavorite.bind(null, targetType, targetId, path);
+
+  return (
+    <form action={action}>
+      <button type="submit" className={active ? "btn btn-active" : "btn"}>
+        {active ? "Saved" : "Save favorite"}
+      </button>

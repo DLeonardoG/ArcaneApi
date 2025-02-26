@@ -3,3 +3,8 @@ export function MarkdownLite({ content }: { content: string }) {
 
   return (
     <div className="prose-lite">
+      {blocks.map((block, index) => {
+        const trimmed = block.trim();
+        if (trimmed.startsWith("## ")) {
+          return <h2 key={index}>{trimmed.slice(3)}</h2>;
+        }

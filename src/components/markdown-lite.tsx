@@ -13,3 +13,6 @@ export function MarkdownLite({ content }: { content: string }) {
         }
         return <p key={index}>{trimmed}</p>;
       })}
+    </div>
+  );
+}

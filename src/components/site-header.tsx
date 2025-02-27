@@ -9,3 +9,14 @@ export async function SiteHeader() {
   } catch {
     session = null;
   }
+
+  return (
+    <header className="site-header">
+      <div className="site-header__inner">
+        <Link href="/" className="brand">
+          LoreVault
+        </Link>
+        <nav className="nav">
+          <Link href="/universes">Universes</Link>
+          <Link href="/search">Search</Link>
+          {session?.user ? (

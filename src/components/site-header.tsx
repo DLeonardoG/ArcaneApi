@@ -20,3 +20,14 @@ export async function SiteHeader() {
           <Link href="/universes">Universes</Link>
           <Link href="/search">Search</Link>
           {session?.user ? (
+            <>
+              <Link href="/profile">Profile</Link>
+              {(session.user.role === "EDITOR" ||
+                session.user.role === "ADMIN") && (
+                <Link href="/editor">Editor</Link>
+              )}
+              <LogoutButton />
+            </>
+          ) : (
+            <>
+              <Link href="/login">Sign in</Link>

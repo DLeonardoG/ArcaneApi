@@ -31,3 +31,13 @@ export async function SiteHeader() {
           ) : (
             <>
               <Link href="/login">Sign in</Link>
+              <Link href="/register" className="nav-cta">
+                Join
+              </Link>
+            </>
+          )}
+        </nav>
+      </div>
+    </header>
+  );
+}

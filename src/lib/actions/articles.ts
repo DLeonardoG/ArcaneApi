@@ -14,3 +14,19 @@ const articleSchema = z.object({
     .min(3)
     .max(120)
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  summary: z.string().min(10).max(400),
+  body: z.string().min(20),
+});
+
+function canEdit(role?: string) {
+  return role === "EDITOR" || role === "ADMIN";
+}
+
+export async function createArticle(formData: FormData): Promise<void> {
+  const session = await auth();
+  if (!session?.user || !canEdit(session.user.role)) {
+    throw new Error("Editors only.");
+  }
+
+  const parsed = articleSchema.safeParse({
+    universeSlug: formData.get("universeSlug"),

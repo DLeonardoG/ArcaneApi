@@ -30,3 +30,19 @@ export async function createArticle(formData: FormData): Promise<void> {
 
   const parsed = articleSchema.safeParse({
     universeSlug: formData.get("universeSlug"),
+    title: formData.get("title"),
+    slug: formData.get("slug"),
+    summary: formData.get("summary"),
+    body: formData.get("body"),
+  });
+
+  if (!parsed.success) {
+    throw new Error("Invalid article fields.");
+  }
+
+  const universe = await prisma.universe.findUnique({
+    where: { slug: parsed.data.universeSlug },
+  });
+  if (!universe) throw new Error("Universe not found.");
+
+  await prisma.article.create({

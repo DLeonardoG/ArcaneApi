@@ -46,3 +46,18 @@ export async function createArticle(formData: FormData): Promise<void> {
   if (!universe) throw new Error("Universe not found.");
 
   await prisma.article.create({
+    data: {
+      universeId: universe.id,
+      title: parsed.data.title,
+      slug: parsed.data.slug,
+      summary: parsed.data.summary,
+      body: parsed.data.body,
+      authorId: session.user.id,
+      published: true,
+    },
+  });
+
+  revalidatePath(`/u/${universe.slug}`);
+  revalidatePath(`/u/${universe.slug}/articles`);
+  redirect(`/u/${universe.slug}/articles/${parsed.data.slug}`);
+}

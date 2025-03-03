@@ -18,3 +18,23 @@ export async function registerUser(formData: FormData) {
     email: formData.get("email"),
     password: formData.get("password"),
   });
+
+  if (!parsed.success) {
+    return { error: "Check your name, email, and password (min 6 chars)." };
+  }
+
+  const email = parsed.data.email.toLowerCase();
+  const existing = await prisma.user.findUnique({ where: { email } });
+  if (existing) {
+    return { error: "That email is already registered." };
+  }
+
+  const passwordHash = await bcrypt.hash(parsed.data.password, 10);
+  await prisma.user.create({
+    data: {
+      name: parsed.data.name,
+      email,
+      passwordHash,
+      role: "USER",
+    },
+  });

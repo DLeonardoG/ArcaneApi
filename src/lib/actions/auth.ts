@@ -38,3 +38,23 @@ export async function registerUser(formData: FormData) {
       role: "USER",
     },
   });
+
+  try {
+    await signIn("credentials", {
+      email,
+      password: parsed.data.password,
+      redirectTo: "/profile",
+    });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      return { error: "Account created, but sign-in failed. Try logging in." };
+    }
+    throw error;
+  }
+}
+
+export async function loginUser(formData: FormData) {
+  const email = String(formData.get("email") ?? "").toLowerCase();
+  const password = String(formData.get("password") ?? "");
+
+  try {

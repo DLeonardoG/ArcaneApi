@@ -58,3 +58,19 @@ export async function loginUser(formData: FormData) {
   const password = String(formData.get("password") ?? "");
 
   try {
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: "/profile",
+    });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      return { error: "Invalid email or password." };
+    }
+    throw error;
+  }
+}
+
+export async function logoutUser() {
+  await signOut({ redirectTo: "/" });
+}

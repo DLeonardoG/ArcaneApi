@@ -9,3 +9,14 @@ export async function toggleFavorite(
   targetType: FavoriteTarget,
   targetId: string,
   path: string,
+  _formData?: FormData,
+): Promise<void> {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return;
+  }
+
+  const existing = await prisma.favorite.findUnique({
+    where: {
+      userId_targetType_targetId: {
+        userId: session.user.id,

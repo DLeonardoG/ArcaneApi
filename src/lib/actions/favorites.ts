@@ -20,3 +20,14 @@ export async function toggleFavorite(
     where: {
       userId_targetType_targetId: {
         userId: session.user.id,
+        targetType,
+        targetId,
+      },
+    },
+  });
+
+  if (existing) {
+    await prisma.favorite.delete({ where: { id: existing.id } });
+  } else {
+    await prisma.favorite.create({
+      data: {

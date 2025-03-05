@@ -31,3 +31,13 @@ export async function toggleFavorite(
   } else {
     await prisma.favorite.create({
       data: {
+        userId: session.user.id,
+        targetType,
+        targetId,
+      },
+    });
+  }
+
+  revalidatePath(path);
+  revalidatePath("/profile");
+}

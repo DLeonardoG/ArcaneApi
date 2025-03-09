@@ -118,3 +118,39 @@ export async function searchLore(query: string) {
       },
       take: 12,
       include: { universe: { select: { slug: true, name: true } } },
+    }),
+    prisma.episode.findMany({
+      where: {
+        OR: [
+          { title: { contains: q, mode: "insensitive" } },
+          { synopsis: { contains: q, mode: "insensitive" } },
+        ],
+      },
+      take: 12,
+      include: { universe: { select: { slug: true, name: true } } },
+    }),
+    prisma.article.findMany({
+      where: {
+        published: true,
+        OR: [
+          { title: { contains: q, mode: "insensitive" } },
+          { summary: { contains: q, mode: "insensitive" } },
+        ],
+      },
+      take: 12,
+      include: { universe: { select: { slug: true, name: true } } },
+    }),
+    prisma.location.findMany({
+      where: {
+        OR: [
+          { name: { contains: q, mode: "insensitive" } },
+          { summary: { contains: q, mode: "insensitive" } },
+        ],
+      },
+      take: 12,
+      include: { universe: { select: { slug: true, name: true } } },
+    }),
+  ]);
+
+  return { characters, episodes, articles, locations };
+}

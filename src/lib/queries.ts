@@ -78,3 +78,43 @@ export async function getFaction(universeSlug: string, slug: string) {
     include: { universe: true },
   });
 }
+
+export async function getArticles(universeSlug: string) {
+  return prisma.article.findMany({
+    where: { universe: { slug: universeSlug }, published: true },
+    orderBy: { updatedAt: "desc" },
+    include: { author: { select: { name: true } } },
+  });
+}
+
+export async function getArticle(universeSlug: string, slug: string) {
+  return prisma.article.findFirst({
+    where: { slug, universe: { slug: universeSlug }, published: true },
+    include: {
+      universe: true,
+      author: { select: { name: true } },
+    },
+  });
+}
+
+export async function searchLore(query: string) {
+  const q = query.trim();
+  if (!q) {
+    return {
+      characters: [],
+      episodes: [],
+      articles: [],
+      locations: [],
+    };
+  }
+
+  const [characters, episodes, articles, locations] = await Promise.all([
+    prisma.character.findMany({
+      where: {
+        OR: [
+          { name: { contains: q, mode: "insensitive" } },
+          { summary: { contains: q, mode: "insensitive" } },
+        ],
+      },
+      take: 12,
+      include: { universe: { select: { slug: true, name: true } } },

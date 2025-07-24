@@ -9,8 +9,9 @@ export async function toggleFavorite(
   targetType: FavoriteTarget,
   targetId: string,
   path: string,
-  _formData?: FormData,
+  formData?: FormData,
 ): Promise<void> {
+  void formData;
   const session = await auth();
   if (!session?.user?.id) {
     return;

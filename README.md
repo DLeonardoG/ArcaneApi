@@ -10,3 +10,17 @@ Fan wiki multi-saga. Arcane is the founding shelf; the schema is ready for every
 - **pnpm**
 
 ## Local setup
+
+```bash
+pnpm install
+pnpm db:up
+pnpm db:setup
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+Seed accounts:
+
+- `admin@lorevault.app` / `lorevault123` (ADMIN)
+- `editor@lorevault.app` / `lorevault123` (EDITOR)

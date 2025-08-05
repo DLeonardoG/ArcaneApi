@@ -141,3 +141,52 @@ model Location {
 
   @@unique([universeId, slug])
 }
+
+model Episode {
+  id          String   @id @default(cuid())
+  universeId  String
+  slug        String
+  title       String
+  season      Int
+  number      Int
+  synopsis    String   @db.Text
+  airDate     String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  universe    Universe @relation(fields: [universeId], references: [id], onDelete: Cascade)
+
+  @@unique([universeId, slug])
+  @@unique([universeId, season, number])
+}
+
+model Article {
+  id          String   @id @default(cuid())
+  universeId  String
+  slug        String
+  title       String
+  summary     String   @db.Text
+  body        String   @db.Text
+  imageUrl    String?
+  published   Boolean  @default(true)
+  authorId    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  universe    Universe @relation(fields: [universeId], references: [id], onDelete: Cascade)
+  author      User?    @relation("ArticleAuthor", fields: [authorId], references: [id])
+
+  @@unique([universeId, slug])
+  @@index([title])
+}
+
+model Favorite {
+  id         String         @id @default(cuid())
+  userId     String
+  targetType FavoriteTarget
+  targetId   String
+  createdAt  DateTime       @default(now())
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, targetType, targetId])
+  @@index([userId])
+}

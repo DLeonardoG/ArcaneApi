@@ -69,3 +69,74 @@ function listFiles(dir: string, base = dir): string[] {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       out.push(...listFiles(full, base));
+      continue;
+    }
+    if (IGNORE_FILES.has(entry.name)) continue;
+    if (entry.name.endsWith(".tsbuildinfo")) continue;
+    out.push(path.relative(base, full).split(path.sep).join("/"));
+  }
+  return out.sort();
+}
+
+function buildCalendar(): Date[] {
+  const dates: Date[] = [];
+  const cursor = new Date(START);
+  while (cursor <= END) {
+    const isSaturday = cursor.getDay() === 6;
+    const hours = isSaturday ? [12] : SLOT_HOURS;
+    for (const hour of hours) {
+      const stamp = new Date(cursor);
+      stamp.setHours(hour, 10 + (dates.length % 40), dates.length % 50, 0);
+      dates.push(stamp);
+    }
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return dates;
+}
+
+function phaseMessage(index: number, total: number, fileHint: string): string {
+  const progress = index / total;
+  const file = fileHint.split("/").pop() ?? fileHint;
+
+  if (progress < 0.16) {
+    const pool = [
+      `feat: engagement schema touch ${file}`,
+      `chore: media asset fields via ${file}`,
+      `feat: imageUrl columns in ${file}`,
+      `docs: engagement data notes ${file}`,
+    ];
+    return pool[index % pool.length];
+  }
+  if (progress < 0.33) {
+    const pool = [
+      `feat: comment actions in ${file}`,
+      `feat: rating upsert flow ${file}`,
+      `fix: comment validation ${file}`,
+      `refactor: engagement helpers ${file}`,
+    ];
+    return pool[index % pool.length];
+  }
+  if (progress < 0.5) {
+    const pool = [
+      `feat: gallery media actions ${file}`,
+      `feat: vercel blob upload path ${file}`,
+      `chore: blob dependency wiring ${file}`,
+      `fix: cover image assignment ${file}`,
+    ];
+    return pool[index % pool.length];
+  }
+  if (progress < 0.66) {
+    const pool = [
+      `feat: studio publish desk ${file}`,
+      `feat: create character from studio ${file}`,
+      `feat: studio tabs navigation ${file}`,
+      `docs: studio authoring guide ${file}`,
+    ];
+    return pool[index % pool.length];
+  }
+  if (progress < 0.83) {
+    const pool = [
+      `feat: wire engagement on detail pages ${file}`,
+      `feat: profile ratings and comments ${file}`,
+      `style: engagement panel layout ${file}`,
+      `refactor: entity engagement wrapper ${file}`,

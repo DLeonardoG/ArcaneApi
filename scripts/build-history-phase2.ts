@@ -211,3 +211,74 @@ function buildOps(files: string[], slotCount: number): Op[] {
 
   const perFile = Math.max(
     1,
+    Math.ceil(slotCount / Math.max(changed.length, 1)),
+  );
+
+  for (const relative of changed) {
+    const absolute = path.join(SNAPSHOT, relative);
+    const content = fs.readFileSync(absolute);
+    const chunks = chunkBuffer(content, Math.min(perFile, 5));
+    for (const chunk of chunks) {
+      ops.push({
+        message: "",
+        files: [{ relative, content: chunk }],
+      });
+    }
+  }
+
+  let pad = 0;
+  while (ops.length < slotCount) {
+    pad += 1;
+    const note = "docs/changelog-phase2.md";
+    const prev =
+      ops
+        .slice()
+        .reverse()
+        .find((op) => op.files.some((f) => f.relative === note))
+        ?.files.find((f) => f.relative === note)
+        ?.content.toString("utf8") ??
+      "# LoreVault phase 2 — engagement era\n\n";
+    ops.push({
+      message: "",
+      files: [
+        {
+          relative: note,
+          content: Buffer.from(`${prev}- engagement polish ${pad}\n`, "utf8"),
+        },
+      ],
+    });
+  }
+
+  if (ops.length > slotCount) {
+    const head = ops.slice(0, slotCount - 1);
+    const tail = ops.slice(slotCount - 1);
+    const merged = new Map<string, Buffer>();
+    for (const op of tail) {
+      for (const file of op.files) merged.set(file.relative, file.content);
+    }
+    head.push({
+      message: "",
+      files: [...merged.entries()].map(([relative, content]) => ({
+        relative,
+        content,
+      })),
+    });
+    return head.map((op, index) => ({
+      ...op,
+      message: phaseMessage(
+        index,
+        slotCount,
+        op.files[0]?.relative ?? "project",
+      ),
+    }));
+  }
+
+  return ops.map((op, index) => ({
+    ...op,
+    message: phaseMessage(index, slotCount, op.files[0]?.relative ?? "project"),
+  }));
+}
+
+function ensureSnapshot() {
+  if (fs.existsSync(SNAPSHOT)) {
+    fs.rmSync(SNAPSHOT, { recursive: true, force: true });

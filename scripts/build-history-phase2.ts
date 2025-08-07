@@ -282,3 +282,72 @@ function buildOps(files: string[], slotCount: number): Op[] {
 function ensureSnapshot() {
   if (fs.existsSync(SNAPSHOT)) {
     fs.rmSync(SNAPSHOT, { recursive: true, force: true });
+  }
+  fs.mkdirSync(SNAPSHOT, { recursive: true });
+  const files = listFiles(ROOT);
+  for (const relative of files) {
+    const from = path.join(ROOT, relative);
+    const to = path.join(SNAPSHOT, relative);
+    fs.mkdirSync(path.dirname(to), { recursive: true });
+    fs.copyFileSync(from, to);
+  }
+  return files;
+}
+
+function restoreHeadClean() {
+  git(["reset", "--hard", "HEAD"]);
+  git(["clean", "-fd", "-e", "node_modules", "-e", ".env", "-e", ".neon"]);
+  fs.writeFileSync(path.join(ROOT, ".gitignore"), PROTECTIVE_GITIGNORE);
+}
+
+function writeOpFiles(op: Op) {
+  for (const file of op.files) {
+    const absolute = path.join(ROOT, file.relative);
+    fs.mkdirSync(path.dirname(absolute), { recursive: true });
+    fs.writeFileSync(absolute, file.content);
+  }
+  fs.writeFileSync(path.join(ROOT, ".gitignore"), PROTECTIVE_GITIGNORE);
+}
+
+function isoWithOffset(date: Date): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}-05:00`;
+}
+
+function main() {
+  const tip = gitOut(["rev-parse", "--short", "HEAD"]);
+  console.log(`Starting from HEAD ${tip} (phase 1 preserved)`);
+  console.log(`Snapshotting to ${SNAPSHOT}...`);
+  const files = ensureSnapshot();
+  const calendar = buildCalendar();
+  console.log(`Files scanned: ${files.length}; slots: ${calendar.length}`);
+
+  const ops = buildOps(files, calendar.length);
+  console.log(`Operations: ${ops.length}`);
+
+  console.log("Restoring clean HEAD tree...");
+  restoreHeadClean();
+
+  let made = 0;
+  for (let i = 0; i < ops.length; i++) {
+    const op = ops[i];
+    const when = isoWithOffset(calendar[i]);
+    writeOpFiles(op);
+    git(["-c", "advice.addIgnoredFile=false", "add", "-A"]);
+    const status = gitOut(["status", "--porcelain"]);
+    if (!status) continue;
+    if (status.split("\n").some((line) => /\s\.env$|\.lorevault-final/.test(line))) {
+      throw new Error(`Refusing sensitive paths:\n${status}`);
+    }
+    git(["commit", "-m", op.message], {
+      GIT_AUTHOR_DATE: when,
+      GIT_COMMITTER_DATE: when,
+    });
+    made += 1;
+    if (made % 50 === 0) console.log(`Committed ${made}/${ops.length}`);
+  }
+
+  console.log(`Phase 2 complete. Commits created: ${made}`);
+}
+
+main();

@@ -140,3 +140,74 @@ function phaseMessage(index: number, total: number, fileHint: string): string {
       `feat: profile ratings and comments ${file}`,
       `style: engagement panel layout ${file}`,
       `refactor: entity engagement wrapper ${file}`,
+    ];
+    return pool[index % pool.length];
+  }
+  const pool = [
+    `docs: blob token and studio notes ${file}`,
+    `style: gallery and comment polish ${file}`,
+    `fix: late engagement polish ${file}`,
+    `chore: phase2 changelog ${file}`,
+  ];
+  return pool[index % pool.length];
+}
+
+function chunkBuffer(content: Buffer, parts: number): Buffer[] {
+  if (parts <= 1) return [content];
+  const text = content.toString("utf8");
+  if (text.includes("\u0000")) return [content];
+  const lines = text.split("\n");
+  if (lines.length < parts) {
+    return Array.from({ length: parts }, (_, i) =>
+      Buffer.from(
+        i === parts - 1
+          ? text
+          : text.slice(
+              0,
+              Math.max(1, Math.floor(text.length * ((i + 1) / parts))),
+            ),
+        "utf8",
+      ),
+    );
+  }
+  const size = Math.ceil(lines.length / parts);
+  const chunks: Buffer[] = [];
+  for (let i = 0; i < parts; i++) {
+    chunks.push(
+      Buffer.from(
+        lines.slice(0, Math.min(lines.length, size * (i + 1))).join("\n"),
+        "utf8",
+      ),
+    );
+  }
+  return chunks;
+}
+
+function headContent(relative: string): Buffer | null {
+  try {
+    return Buffer.from(
+      execFileSync("git", ["show", `HEAD:${relative}`], {
+        cwd: ROOT,
+        encoding: "buffer",
+      }) as Buffer,
+    );
+  } catch {
+    return null;
+  }
+}
+
+function buildOps(files: string[], slotCount: number): Op[] {
+  const ops: Op[] = [];
+  const changed: string[] = [];
+
+  for (const relative of files) {
+    const absolute = path.join(SNAPSHOT, relative);
+    const next = fs.readFileSync(absolute);
+    const prev = headContent(relative);
+    if (!prev || !prev.equals(next)) {
+      changed.push(relative);
+    }
+  }
+
+  const perFile = Math.max(
+    1,

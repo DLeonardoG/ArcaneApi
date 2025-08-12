@@ -56,3 +56,32 @@ export default async function ProfilePage() {
       : Promise.resolve([]),
     articleIds.length
       ? prisma.article.findMany({
+          where: { id: { in: articleIds } },
+          include: { universe: { select: { slug: true, name: true } } },
+        })
+      : Promise.resolve([]),
+  ]);
+
+  return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>{session.user.name ?? "Fan"}</h1>
+        <p>
+          {session.user.email} · role {session.user.role}
+        </p>
+      </div>
+
+      <section className="panel profile-section">
+        <h2>Favorites</h2>
+        {characters.length + episodes.length + articles.length === 0 ? (
+          <p className="muted">No favorites yet. Save lore from any detail page.</p>
+        ) : (
+          <ul>
+            {characters.map((character) => (
+              <li key={character.id}>
+                <Link
+                  href={`/u/${character.universe.slug}/characters/${character.slug}`}
+                >
+                  {character.name} · {character.universe.name}
+                </Link>
+              </li>

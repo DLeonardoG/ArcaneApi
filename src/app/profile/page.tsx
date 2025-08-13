@@ -114,3 +114,31 @@ export default async function ProfilePage() {
           <p className="muted">No ratings yet.</p>
         ) : (
           <ul>
+            {ratings.map((rating) => (
+              <li key={rating.id}>
+                {rating.targetType.toLowerCase()} · {rating.score}/5
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section className="panel profile-section">
+        <h2>Your comments</h2>
+        {comments.length === 0 ? (
+          <p className="muted">No comments yet.</p>
+        ) : (
+          <ul>
+            {comments.map((comment) => (
+              <li key={comment.id}>
+                <strong>{comment.targetType.toLowerCase()}</strong>:{" "}
+                {comment.body.slice(0, 120)}
+                {comment.body.length > 120 ? "…" : ""}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
+  );
+}

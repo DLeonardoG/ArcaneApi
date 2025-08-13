@@ -85,3 +85,32 @@ export default async function ProfilePage() {
                   {character.name} · {character.universe.name}
                 </Link>
               </li>
+            ))}
+            {episodes.map((episode) => (
+              <li key={episode.id}>
+                <Link
+                  href={`/u/${episode.universe.slug}/episodes/${episode.slug}`}
+                >
+                  {episode.title} · {episode.universe.name}
+                </Link>
+              </li>
+            ))}
+            {articles.map((article) => (
+              <li key={article.id}>
+                <Link
+                  href={`/u/${article.universe.slug}/articles/${article.slug}`}
+                >
+                  {article.title} · {article.universe.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section className="panel profile-section">
+        <h2>Recent ratings</h2>
+        {ratings.length === 0 ? (
+          <p className="muted">No ratings yet.</p>
+        ) : (
+          <ul>

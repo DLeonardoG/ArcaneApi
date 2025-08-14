@@ -42,3 +42,47 @@ export default async function StudioPage({ searchParams }: Props) {
         {[
           "character",
           "episode",
+          "location",
+          "faction",
+          "article",
+          "universe",
+        ].map((item) => (
+          <Link
+            key={item}
+            href={`/studio?tab=${item}`}
+            className={tab === item ? "chip chip-active" : "chip"}
+          >
+            {item}
+          </Link>
+        ))}
+      </nav>
+
+      {tab === "character" ? (
+        <StudioForm title="New character" action={createCharacter}>
+          <UniverseSelect universes={universes} />
+          <Field name="name" label="Name" required />
+          <Field name="slug" label="Slug" required placeholder="jinx" />
+          <Field name="title" label="Title" placeholder="The loose cannon" />
+          <Area name="summary" label="Summary" required />
+          <Area name="bio" label="Bio" required rows={6} />
+          <Field
+            name="allegiances"
+            label="Allegiances (comma-separated)"
+            placeholder="Zaun, Silco"
+          />
+          <Field name="imageUrl" label="Cover image URL" type="url" />
+        </StudioForm>
+      ) : null}
+
+      {tab === "episode" ? (
+        <StudioForm title="New episode" action={createEpisode}>
+          <UniverseSelect universes={universes} />
+          <Field name="title" label="Title" required />
+          <Field name="slug" label="Slug" required />
+          <Field name="season" label="Season" type="number" required />
+          <Field name="number" label="Episode number" type="number" required />
+          <Area name="synopsis" label="Synopsis" required />
+          <Field name="airDate" label="Air date" placeholder="2024-11-09" />
+          <Field name="imageUrl" label="Cover image URL" type="url" />
+        </StudioForm>
+      ) : null}

@@ -8,3 +8,15 @@ import { getArticle } from "@/lib/queries";
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ universe: string; slug: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { universe, slug } = await params;
+  const article = await getArticle(universe, slug);
+  if (!article) return { title: "Article" };
+  return {
+    title: `${article.title} · ${article.universe.name}`,
+    description: article.summary,
+  };
+}
+
+export default async function ArticlePage({ params }: Props) {

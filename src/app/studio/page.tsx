@@ -174,3 +174,46 @@ function UniverseSelect({
 }
 
 function Field({
+  name,
+  label,
+  required,
+  type = "text",
+  placeholder,
+}: {
+  name: string;
+  label: string;
+  required?: boolean;
+  type?: string;
+  placeholder?: string;
+}) {
+  return (
+    <label>
+      {label}
+      <input
+        name={name}
+        type={type}
+        required={required}
+        placeholder={placeholder}
+      />
+    </label>
+  );
+}
+
+function Area({
+  name,
+  label,
+  required,
+  rows = 4,
+}: {
+  name: string;
+  label: string;
+  required?: boolean;
+  rows?: number;
+}) {
+  return (
+    <label>
+      {label}
+      <textarea name={name} required={required} rows={rows} />
+    </label>
+  );
+}

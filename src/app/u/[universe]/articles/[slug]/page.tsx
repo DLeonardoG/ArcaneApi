@@ -31,3 +31,14 @@ export default async function ArticlePage({ params }: Props) {
       <div className="page-hero">
         <h1>{article.title}</h1>
         <p>{article.summary}</p>
+        <div className="meta-row">
+          <span>{article.author?.name ?? "Archive"}</span>
+        </div>
+      </div>
+      <article className="panel">
+        <MarkdownLite content={article.body} />
+      </article>
+      <EntityEngagement
+        targetType={FavoriteTarget.ARTICLE}
+        targetId={article.id}
+        universeId={article.universeId}

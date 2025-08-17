@@ -42,3 +42,9 @@ export default async function ArticlePage({ params }: Props) {
         targetType={FavoriteTarget.ARTICLE}
         targetId={article.id}
         universeId={article.universeId}
+        path={path}
+        coverUrl={article.imageUrl}
+      />
+    </div>
+  );
+}

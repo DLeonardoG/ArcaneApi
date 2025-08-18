@@ -31,3 +31,14 @@ export default async function CharacterPage({ params }: Props) {
         <h1>{character.name}</h1>
         <p>{character.summary}</p>
         <div className="chip-row">
+          {character.allegiances.map((item) => (
+            <span key={item} className="chip">
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+      <article className="panel prose-lite">
+        <p>{character.bio}</p>
+      </article>
+      <EntityEngagement

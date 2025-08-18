@@ -20,3 +20,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CharacterPage({ params }: Props) {
   const { universe, slug } = await params;
+  const character = await getCharacter(universe, slug);
+  if (!character) notFound();
+
+  const path = `/u/${universe}/characters/${slug}`;
+
+  return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>{character.name}</h1>
+        <p>{character.summary}</p>
+        <div className="chip-row">

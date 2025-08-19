@@ -42,3 +42,12 @@ export default async function CharacterPage({ params }: Props) {
         <p>{character.bio}</p>
       </article>
       <EntityEngagement
+        targetType={FavoriteTarget.CHARACTER}
+        targetId={character.id}
+        universeId={character.universeId}
+        path={path}
+        coverUrl={character.imageUrl}
+      />
+    </div>
+  );
+}

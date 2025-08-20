@@ -38,3 +38,12 @@ export default async function EpisodePage({ params }: Props) {
         <p>{episode.synopsis}</p>
       </article>
       <EntityEngagement
+        targetType={FavoriteTarget.EPISODE}
+        targetId={episode.id}
+        universeId={episode.universeId}
+        path={path}
+        coverUrl={episode.imageUrl}
+      />
+    </div>
+  );
+}

@@ -17,3 +17,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: episode.synopsis,
   };
 }
+
+export default async function EpisodePage({ params }: Props) {
+  const { universe, slug } = await params;
+  const episode = await getEpisode(universe, slug);
+  if (!episode) notFound();
+
+  const path = `/u/${universe}/episodes/${slug}`;
+
+  return (
+    <div className="shell">
+      <div className="page-hero">

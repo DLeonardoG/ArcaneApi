@@ -28,3 +28,13 @@ export default async function FactionPage({ params }: Props) {
   return (
     <div className="shell">
       <div className="page-hero">
+        <h1>{faction.name}</h1>
+        <p>{faction.summary}</p>
+      </div>
+      <article className="panel prose-lite">
+        <p>{faction.description}</p>
+      </article>
+      <EntityEngagement
+        targetType={FavoriteTarget.FACTION}
+        targetId={faction.id}
+        universeId={faction.universeId}

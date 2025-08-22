@@ -38,3 +38,9 @@ export default async function FactionPage({ params }: Props) {
         targetType={FavoriteTarget.FACTION}
         targetId={faction.id}
         universeId={faction.universeId}
+        path={path}
+        coverUrl={faction.imageUrl}
+      />
+    </div>
+  );
+}

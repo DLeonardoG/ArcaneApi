@@ -38,3 +38,9 @@ export default async function LocationPage({ params }: Props) {
         targetType={FavoriteTarget.LOCATION}
         targetId={location.id}
         universeId={location.universeId}
+        path={path}
+        coverUrl={location.imageUrl}
+      />
+    </div>
+  );
+}

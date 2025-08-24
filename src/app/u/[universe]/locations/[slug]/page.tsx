@@ -28,3 +28,13 @@ export default async function LocationPage({ params }: Props) {
   return (
     <div className="shell">
       <div className="page-hero">
+        <h1>{location.name}</h1>
+        <p>{location.summary}</p>
+      </div>
+      <article className="panel prose-lite">
+        <p>{location.description}</p>
+      </article>
+      <EntityEngagement
+        targetType={FavoriteTarget.LOCATION}
+        targetId={location.id}
+        universeId={location.universeId}

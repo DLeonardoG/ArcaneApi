@@ -35,3 +35,40 @@ export async function EngagementPanel({
             src={coverUrl || engagement.media[0]?.url}
             alt={engagement.media[0]?.alt || "Cover"}
           />
+        </div>
+      )}
+
+      <div className="engagement__toolbar">
+        <div className="rating-summary">
+          <strong>
+            {engagement.ratingCount
+              ? engagement.averageRating.toFixed(1)
+              : "—"}
+          </strong>
+          <span>/ 5 · {engagement.ratingCount} ratings</span>
+        </div>
+        {userId ? (
+          <FavoriteButton
+            targetType={targetType}
+            targetId={targetId}
+            path={path}
+            active={engagement.isFavorite}
+          />
+        ) : (
+          <p className="muted">Sign in to favorite, rate, and comment.</p>
+        )}
+      </div>
+
+      {userId ? (
+        <form className="rating-form" action={upsertRating}>
+          <input type="hidden" name="targetType" value={targetType} />
+          <input type="hidden" name="targetId" value={targetId} />
+          <input type="hidden" name="path" value={path} />
+          <label>
+            Your rating
+            <select
+              name="score"
+              defaultValue={engagement.userScore ?? 5}
+              required
+            >
+              {[5, 4, 3, 2, 1].map((score) => (

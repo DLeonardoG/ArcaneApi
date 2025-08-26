@@ -109,3 +109,40 @@ export async function EngagementPanel({
               <input type="hidden" name="universeId" value={universeId} />
             ) : null}
             <h4 style={{ margin: 0 }}>Add image</h4>
+            <label>
+              Image URL
+              <input name="url" type="url" placeholder="https://..." />
+            </label>
+            <label>
+              Or upload file
+              <input name="file" type="file" accept="image/*" />
+            </label>
+            <label>
+              Alt text
+              <input name="alt" maxLength={160} />
+            </label>
+            <label>
+              Caption
+              <input name="caption" maxLength={280} />
+            </label>
+            {canEditCover ? (
+              <label className="checkbox-row">
+                <input name="isCover" type="checkbox" />
+                Set as cover
+              </label>
+            ) : null}
+            <button className="btn btn-primary" type="submit">
+              Upload image
+            </button>
+          </form>
+        ) : null}
+      </div>
+
+      <div className="comments">
+        <h3>Comments</h3>
+        {userId ? (
+          <form className="form-stack" action={addComment}>
+            <input type="hidden" name="targetType" value={targetType} />
+            <input type="hidden" name="targetId" value={targetId} />
+            <input type="hidden" name="path" value={path} />
+            <label>

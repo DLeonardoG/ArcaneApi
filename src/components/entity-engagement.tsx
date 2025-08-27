@@ -5,3 +5,10 @@ import { canPublish } from "@/lib/engagement";
 
 export async function EntityEngagement({
   targetType,
+  targetId,
+  universeId,
+  path,
+  coverUrl,
+}: {
+  targetType: FavoriteTarget;
+  targetId: string;

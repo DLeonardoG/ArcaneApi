@@ -19,3 +19,10 @@ export async function EntityEngagement({
   const session = await auth();
 
   return (
+    <EngagementPanel
+      targetType={targetType}
+      targetId={targetId}
+      universeId={universeId}
+      path={path}
+      userId={session?.user?.id}
+      canEditCover={canPublish(session?.user?.role)}

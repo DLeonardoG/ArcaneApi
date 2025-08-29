@@ -25,3 +25,12 @@ export async function SiteHeader() {
               <Link href="/profile">Profile</Link>
               {(session.user.role === "EDITOR" ||
                 session.user.role === "ADMIN") && (
+                <Link href="/studio">Studio</Link>
+              )}
+              <LogoutButton />
+            </>
+          ) : (
+            <>
+              <Link href="/login">Sign in</Link>
+              <Link href="/register" className="nav-cta">
+                Join

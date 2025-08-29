@@ -16,3 +16,12 @@ export async function SiteHeader() {
       <div className="site-header__inner">
         <Link href="/" className="brand">
           LoreVault
+        </Link>
+        <nav className="nav">
+          <Link href="/universes">Universes</Link>
+          <Link href="/search">Search</Link>
+          {session?.user ? (
+            <>
+              <Link href="/profile">Profile</Link>
+              {(session.user.role === "EDITOR" ||
+                session.user.role === "ADMIN") && (

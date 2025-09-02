@@ -114,3 +114,31 @@ async function setEntityCover(
       await prisma.character.update({
         where: { id: targetId },
         data: { imageUrl: url },
+      });
+      break;
+    case "EPISODE":
+      await prisma.episode.update({
+        where: { id: targetId },
+        data: { imageUrl: url },
+      });
+      break;
+    case "LOCATION":
+      await prisma.location.update({
+        where: { id: targetId },
+        data: { imageUrl: url },
+      });
+      break;
+    case "FACTION":
+      await prisma.faction.update({
+        where: { id: targetId },
+        data: { imageUrl: url },
+      });
+      break;
+    case "ARTICLE":
+      await prisma.article.update({
+        where: { id: targetId },
+        data: { imageUrl: url },
+      });
+      break;
+  }
+}

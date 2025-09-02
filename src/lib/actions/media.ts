@@ -56,3 +56,32 @@ export async function addMediaAsset(formData: FormData): Promise<void> {
     url: formData.get("url") || undefined,
     alt: formData.get("alt") || undefined,
     caption: formData.get("caption") || undefined,
+    isCover: formData.get("isCover") === "on" || formData.get("isCover") === "true",
+    path: formData.get("path"),
+  });
+
+  if (!parsed.success) {
+    throw new Error("Invalid media fields.");
+  }
+
+  // Fans can add gallery images; cover changes require editors
+  if (parsed.data.isCover && !canPublish(session.user.role)) {
+    throw new Error("Only editors can set cover images.");
+  }
+
+  const url = await resolveUploadUrl(formData, parsed.data.url);
+
+  if (parsed.data.isCover) {
+    await prisma.mediaAsset.updateMany({
+      where: {
+        targetType: parsed.data.targetType,
+        targetId: parsed.data.targetId,
+        isCover: true,
+      },
+      data: { isCover: false },
+    });
+
+    await setEntityCover(
+      parsed.data.targetType,
+      parsed.data.targetId,
+      url,

@@ -85,3 +85,32 @@ export async function addMediaAsset(formData: FormData): Promise<void> {
       parsed.data.targetType,
       parsed.data.targetId,
       url,
+    );
+  }
+
+  await prisma.mediaAsset.create({
+    data: {
+      targetType: parsed.data.targetType,
+      targetId: parsed.data.targetId,
+      universeId: parsed.data.universeId || null,
+      url,
+      alt: parsed.data.alt,
+      caption: parsed.data.caption,
+      isCover: Boolean(parsed.data.isCover),
+      uploadedById: session.user.id,
+    },
+  });
+
+  revalidatePath(parsed.data.path);
+}
+
+async function setEntityCover(
+  targetType: FavoriteTarget,
+  targetId: string,
+  url: string,
+) {
+  switch (targetType) {
+    case "CHARACTER":
+      await prisma.character.update({
+        where: { id: targetId },
+        data: { imageUrl: url },

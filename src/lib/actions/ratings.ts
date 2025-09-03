@@ -20,3 +20,14 @@ export async function upsertRating(formData: FormData): Promise<void> {
   }
 
   const parsed = ratingSchema.safeParse({
+    targetType: formData.get("targetType"),
+    targetId: formData.get("targetId"),
+    score: formData.get("score"),
+    path: formData.get("path"),
+  });
+
+  if (!parsed.success) {
+    throw new Error("Pick a rating from 1 to 5.");
+  }
+
+  await prisma.rating.upsert({

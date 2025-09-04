@@ -42,3 +42,10 @@ export async function upsertRating(formData: FormData): Promise<void> {
     create: {
       userId: session.user.id,
       targetType: parsed.data.targetType,
+      targetId: parsed.data.targetId,
+      score: parsed.data.score,
+    },
+  });
+
+  revalidatePath(parsed.data.path);
+}

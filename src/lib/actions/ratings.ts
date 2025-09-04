@@ -31,3 +31,14 @@ export async function upsertRating(formData: FormData): Promise<void> {
   }
 
   await prisma.rating.upsert({
+    where: {
+      userId_targetType_targetId: {
+        userId: session.user.id,
+        targetType: parsed.data.targetType,
+        targetId: parsed.data.targetId,
+      },
+    },
+    update: { score: parsed.data.score },
+    create: {
+      userId: session.user.id,
+      targetType: parsed.data.targetType,

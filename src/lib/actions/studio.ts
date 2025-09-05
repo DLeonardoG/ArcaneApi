@@ -39,3 +39,44 @@ export async function createCharacter(formData: FormData): Promise<void> {
     .split(",")
     .map((item) => item.trim())
     .filter(Boolean);
+  const imageUrl = String(formData.get("imageUrl") ?? "").trim() || null;
+
+  if (!name || !summary || !bio || !slugSchema.safeParse(slug).success) {
+    throw new Error("Invalid character fields.");
+  }
+
+  const universe = await universeIdFromSlug(universeSlug);
+  await prisma.character.create({
+    data: {
+      universeId: universe.id,
+      name,
+      slug,
+      title,
+      summary,
+      bio,
+      allegiances,
+      imageUrl,
+    },
+  });
+
+  revalidatePath(`/u/${universe.slug}`);
+  redirect(`/u/${universe.slug}/characters/${slug}`);
+}
+
+export async function createEpisode(formData: FormData): Promise<void> {
+  const session = await auth();
+  requireEditor(session?.user?.role);
+
+  const universeSlug = String(formData.get("universeSlug") ?? "");
+  const title = String(formData.get("title") ?? "").trim();
+  const slug = String(formData.get("slug") ?? "").trim();
+  const season = Number(formData.get("season"));
+  const number = Number(formData.get("number"));
+  const synopsis = String(formData.get("synopsis") ?? "").trim();
+  const airDate = String(formData.get("airDate") ?? "").trim() || null;
+  const imageUrl = String(formData.get("imageUrl") ?? "").trim() || null;
+
+  if (
+    !title ||
+    !synopsis ||
+    !slugSchema.safeParse(slug).success ||

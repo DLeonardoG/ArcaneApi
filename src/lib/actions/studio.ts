@@ -162,3 +162,39 @@ export async function createFaction(formData: FormData): Promise<void> {
       description,
       imageUrl,
     },
+  });
+
+  revalidatePath(`/u/${universe.slug}`);
+  redirect(`/u/${universe.slug}/factions/${slug}`);
+}
+
+export async function createUniverse(formData: FormData): Promise<void> {
+  const session = await auth();
+  requireEditor(session?.user?.role);
+
+  const name = String(formData.get("name") ?? "").trim();
+  const slug = String(formData.get("slug") ?? "").trim();
+  const tagline = String(formData.get("tagline") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+  const accent = String(formData.get("accent") ?? "").trim() || "#c9a227";
+  const coverUrl = String(formData.get("coverUrl") ?? "").trim() || null;
+
+  if (!name || !tagline || !description || !slugSchema.safeParse(slug).success) {
+    throw new Error("Invalid universe fields.");
+  }
+
+  await prisma.universe.create({
+    data: {
+      name,
+      slug,
+      tagline,
+      description,
+      accent,
+      coverUrl,
+      isFeatured: false,
+    },
+  });
+
+  revalidatePath("/universes");
+  redirect(`/u/${slug}`);
+}

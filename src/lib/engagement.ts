@@ -20,3 +20,14 @@ export async function getEngagement(
     }),
     userId
       ? prisma.rating.findUnique({
+          where: {
+            userId_targetType_targetId: { userId, targetType, targetId },
+          },
+        })
+      : Promise.resolve(null),
+    userId
+      ? prisma.favorite.findUnique({
+          where: {
+            userId_targetType_targetId: { userId, targetType, targetId },
+          },
+        })

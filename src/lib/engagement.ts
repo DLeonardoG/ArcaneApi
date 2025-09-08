@@ -31,3 +31,14 @@ export async function getEngagement(
             userId_targetType_targetId: { userId, targetType, targetId },
           },
         })
+      : Promise.resolve(null),
+    prisma.mediaAsset.findMany({
+      where: { targetType, targetId },
+      orderBy: [{ isCover: "desc" }, { createdAt: "desc" }],
+    }),
+  ]);
+
+  return {
+    comments,
+    averageRating: ratingAgg._avg.score ?? 0,
+    ratingCount: ratingAgg._count.score,

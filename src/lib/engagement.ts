@@ -42,3 +42,12 @@ export async function getEngagement(
     comments,
     averageRating: ratingAgg._avg.score ?? 0,
     ratingCount: ratingAgg._count.score,
+    userScore: userRating?.score ?? null,
+    isFavorite: Boolean(favorite),
+    media,
+  };
+}
+
+export function canPublish(role?: string) {
+  return role === "EDITOR" || role === "ADMIN";
+}

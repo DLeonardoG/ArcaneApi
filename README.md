@@ -40,3 +40,16 @@ Copy `.env.example` to `.env` if needed. Local Docker Postgres is mapped to **lo
 pnpm exec prisma db push
 pnpm db:seed
 ```
+
+(or `prisma migrate deploy` once you add migration history in CI).
+
+## Scripts
+
+| Command | Purpose |
+|---------|---------|
+| `pnpm dev` | Dev server |
+| `pnpm build` | Production build |
+| `pnpm db:up` | Start Postgres via Docker |
+| `pnpm db:setup` | Push schema + seed |
+| `pnpm history:build` | Generate simulated commit history (phase 1) |
+| `pnpm history:phase2` | Generate phase-2 history (engagement era) |

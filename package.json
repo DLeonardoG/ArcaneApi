@@ -8,3 +8,13 @@
     "start": "next start",
     "lint": "eslint .",
     "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:setup": "prisma db push && tsx prisma/seed.ts",
+    "postinstall": "prisma generate",
+    "history:build": "tsx scripts/build-history.ts",
+    "history:phase2": "tsx scripts/build-history-phase2.ts",
+    "history:phase3": "tsx scripts/build-history-phase3.ts"
+  },

@@ -53,3 +53,13 @@ pnpm db:seed
 | `pnpm db:setup` | Push schema + seed |
 | `pnpm history:build` | Generate simulated commit history (phase 1) |
 | `pnpm history:phase2` | Generate phase-2 history (engagement era) |
+
+## Community features
+
+- Ratings (1–5), comments, favorites on every lore detail page
+- Image gallery + cover URLs; file upload via Vercel Blob when configured
+- **Studio** (`/studio`) for EDITOR/ADMIN to publish new lore
+
+## Note
+
+Unofficial fan archive. No ownership of Arcane / Riot IP is claimed.

@@ -25,3 +25,30 @@ async function main() {
       role: "SUPER_ADMIN",
     },
   });
+
+  const editor = await prisma.user.upsert({
+    where: { email: "editor@lorevault.app" },
+    update: {},
+    create: {
+      email: "editor@lorevault.app",
+      name: "Arcane Archivist",
+      passwordHash,
+      role: "EDITOR",
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { email: "fan@lorevault.app" },
+    update: {},
+    create: {
+      email: "fan@lorevault.app",
+      name: "Zaun Fan",
+      passwordHash,
+      role: "USER",
+    },
+  });
+
+  for (const universe of [arcaneUniverse, ...placeholderUniverses]) {
+    await prisma.universe.upsert({
+      where: { slug: universe.slug },
+      update: {

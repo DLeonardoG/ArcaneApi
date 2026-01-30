@@ -52,3 +52,30 @@ async function main() {
     await prisma.universe.upsert({
       where: { slug: universe.slug },
       update: {
+        name: universe.name,
+        tagline: universe.tagline,
+        description: universe.description,
+        accent: universe.accent,
+        isFeatured: universe.isFeatured,
+      },
+      create: universe,
+    });
+  }
+
+  const arcane = await prisma.universe.findUniqueOrThrow({
+    where: { slug: "arcane" },
+  });
+
+  for (const faction of arcaneFactions) {
+    await prisma.faction.upsert({
+      where: {
+        universeId_slug: { universeId: arcane.id, slug: faction.slug },
+      },
+      update: faction,
+      create: { ...faction, universeId: arcane.id },
+    });
+  }
+
+  for (const location of arcaneLocations) {
+    await prisma.location.upsert({
+      where: {

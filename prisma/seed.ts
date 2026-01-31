@@ -79,3 +79,29 @@ async function main() {
   for (const location of arcaneLocations) {
     await prisma.location.upsert({
       where: {
+        universeId_slug: { universeId: arcane.id, slug: location.slug },
+      },
+      update: location,
+      create: { ...location, universeId: arcane.id },
+    });
+  }
+
+  for (const character of arcaneCharacters) {
+    await prisma.character.upsert({
+      where: {
+        universeId_slug: { universeId: arcane.id, slug: character.slug },
+      },
+      update: character,
+      create: { ...character, universeId: arcane.id },
+    });
+  }
+
+  for (const episode of arcaneEpisodes) {
+    await prisma.episode.upsert({
+      where: {
+        universeId_slug: { universeId: arcane.id, slug: episode.slug },
+      },
+      update: episode,
+      create: { ...episode, universeId: arcane.id },
+    });
+  }

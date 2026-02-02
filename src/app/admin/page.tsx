@@ -122,3 +122,32 @@ export default async function AdminPage() {
                   <p className="muted">
                     {user.email} · {user.role}
                   </p>
+                </div>
+                {canEdit ? (
+                  <form className="rating-form" action={setUserRole}>
+                    <input type="hidden" name="userId" value={user.id} />
+                    <label>
+                      Role
+                      <select name="role" defaultValue={user.role}>
+                        <option value="USER">USER</option>
+                        <option value="EDITOR">EDITOR</option>
+                        {canPromoteAdmin(session.user.role) ? (
+                          <option value="ADMIN">ADMIN</option>
+                        ) : null}
+                      </select>
+                    </label>
+                    <button className="btn" type="submit">
+                      Update
+                    </button>
+                  </form>
+                ) : (
+                  <span className="muted">Locked</span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    </div>
+  );
+}

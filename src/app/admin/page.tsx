@@ -60,3 +60,34 @@ export default async function AdminPage() {
         {visiblePending.length === 0 ? (
           <p className="muted">No pending requests you can review.</p>
         ) : (
+          <ul className="admin-list">
+            {visiblePending.map((item) => (
+              <li key={item.id} className="admin-card">
+                <div>
+                  <strong>
+                    {item.user.name ?? "Fan"} → {item.requestedRole}
+                  </strong>
+                  <p className="muted">
+                    {item.user.email} · currently {item.user.role}
+                  </p>
+                  <p>{item.message}</p>
+                </div>
+                <form className="form-stack" action={reviewRoleRequest}>
+                  <input type="hidden" name="requestId" value={item.id} />
+                  <label>
+                    Note
+                    <input name="reviewNote" maxLength={280} />
+                  </label>
+                  <div className="cta-row">
+                    <button
+                      className="btn btn-primary"
+                      type="submit"
+                      name="decision"
+                      value="APPROVED"
+                    >
+                      Approve
+                    </button>
+                    <button
+                      className="btn"
+                      type="submit"
+                      name="decision"

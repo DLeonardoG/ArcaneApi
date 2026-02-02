@@ -91,3 +91,34 @@ export default async function AdminPage() {
                       className="btn"
                       type="submit"
                       name="decision"
+                      value="REJECTED"
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </form>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section className="panel profile-section">
+        <h2>Members</h2>
+        <ul className="admin-list">
+          {users.map((user) => {
+            const role = asRole(user.role);
+            const canEdit =
+              role !== "SUPER_ADMIN" &&
+              (canPromoteAdmin(session.user.role) ||
+                (canAccessAdmin(session.user.role) &&
+                  role !== "ADMIN" &&
+                  user.id !== session.user.id));
+
+            return (
+              <li key={user.id} className="admin-card">
+                <div>
+                  <strong>{user.name ?? "Fan"}</strong>
+                  <p className="muted">
+                    {user.email} · {user.role}
+                  </p>

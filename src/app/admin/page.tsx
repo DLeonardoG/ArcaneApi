@@ -29,3 +29,34 @@ export default async function AdminPage() {
       },
     }),
     prisma.user.findMany({
+      orderBy: [{ role: "desc" }, { createdAt: "asc" }],
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      },
+      take: 100,
+    }),
+  ]);
+
+  const visiblePending = pending.filter((item) =>
+    canReviewRequest(session.user.role, item.requestedRole),
+  );
+
+  return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>Community admin</h1>
+        <p>
+          Review role requests and manage the vault hierarchy. Signed in as{" "}
+          {session.user.role}.
+        </p>
+      </div>
+
+      <section className="panel profile-section">
+        <h2>Pending requests</h2>
+        {visiblePending.length === 0 ? (
+          <p className="muted">No pending requests you can review.</p>
+        ) : (

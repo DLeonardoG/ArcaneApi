@@ -86,3 +86,46 @@ export default async function ProfilePage() {
           {session.user.email} · role {session.user.role}
         </p>
       </div>
+
+      <section className="panel profile-section">
+        <h2>Role access</h2>
+        {pendingRequest ? (
+          <p>
+            Pending request for <strong>{pendingRequest.requestedRole}</strong>.
+            Admins will review it soon.
+          </p>
+        ) : null}
+
+        {canRequestEditor ? (
+          <form className="form-stack" action={submitRoleRequest}>
+            <input type="hidden" name="requestedRole" value="EDITOR" />
+            <p className="muted">
+              Editors publish lore and upload curated images. Pitch why you
+              should join the desk.
+            </p>
+            <label>
+              Why should you be an editor?
+              <textarea name="message" required minLength={20} maxLength={1000} rows={4} />
+            </label>
+            <button className="btn btn-primary" type="submit">
+              Request editor access
+            </button>
+          </form>
+        ) : null}
+
+        {canRequestAdmin ? (
+          <form className="form-stack" action={submitRoleRequest}>
+            <input type="hidden" name="requestedRole" value="ADMIN" />
+            <p className="muted">
+              Admins review community requests. Only a Super Admin can approve
+              this.
+            </p>
+            <label>
+              Why should you be an admin?
+              <textarea name="message" required minLength={20} maxLength={1000} rows={4} />
+            </label>
+            <button className="btn btn-primary" type="submit">
+              Request admin access
+            </button>
+          </form>
+        ) : null}

@@ -42,3 +42,47 @@ export default async function ProfilePage() {
         orderBy: { createdAt: "desc" },
         take: 5,
       }),
+    ]);
+
+  const characterIds = favorites
+    .filter((item) => item.targetType === "CHARACTER")
+    .map((item) => item.targetId);
+  const episodeIds = favorites
+    .filter((item) => item.targetType === "EPISODE")
+    .map((item) => item.targetId);
+  const articleIds = favorites
+    .filter((item) => item.targetType === "ARTICLE")
+    .map((item) => item.targetId);
+
+  const [characters, episodes, articles] = await Promise.all([
+    characterIds.length
+      ? prisma.character.findMany({
+          where: { id: { in: characterIds } },
+          include: { universe: { select: { slug: true, name: true } } },
+        })
+      : Promise.resolve([]),
+    episodeIds.length
+      ? prisma.episode.findMany({
+          where: { id: { in: episodeIds } },
+          include: { universe: { select: { slug: true, name: true } } },
+        })
+      : Promise.resolve([]),
+    articleIds.length
+      ? prisma.article.findMany({
+          where: { id: { in: articleIds } },
+          include: { universe: { select: { slug: true, name: true } } },
+        })
+      : Promise.resolve([]),
+  ]);
+
+  const canRequestEditor = role === "USER" && !pendingRequest;
+  const canRequestAdmin = role === "EDITOR" && !pendingRequest;
+
+  return (
+    <div className="shell">
+      <div className="page-hero">
+        <h1>{session.user.name ?? "Fan"}</h1>
+        <p>
+          {session.user.email} · role {session.user.role}
+        </p>
+      </div>

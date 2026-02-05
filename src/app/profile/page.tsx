@@ -129,3 +129,48 @@ export default async function ProfilePage() {
             </button>
           </form>
         ) : null}
+
+        {!canRequestEditor && !canRequestAdmin && !pendingRequest ? (
+          <p className="muted">No role applications available for your current rank.</p>
+        ) : null}
+
+        {recentRequests.length > 0 ? (
+          <ul>
+            {recentRequests.map((item) => (
+              <li key={item.id}>
+                {item.requestedRole} · {item.status.toLowerCase()}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </section>
+
+      <section className="panel profile-section">
+        <h2>Favorites</h2>
+        {characters.length + episodes.length + articles.length === 0 ? (
+          <p className="muted">No favorites yet. Save lore from any detail page.</p>
+        ) : (
+          <ul>
+            {characters.map((character) => (
+              <li key={character.id}>
+                <Link
+                  href={`/u/${character.universe.slug}/characters/${character.slug}`}
+                >
+                  {character.name} · {character.universe.name}
+                </Link>
+              </li>
+            ))}
+            {episodes.map((episode) => (
+              <li key={episode.id}>
+                <Link
+                  href={`/u/${episode.universe.slug}/episodes/${episode.slug}`}
+                >
+                  {episode.title} · {episode.universe.name}
+                </Link>
+              </li>
+            ))}
+            {articles.map((article) => (
+              <li key={article.id}>
+                <Link
+                  href={`/u/${article.universe.slug}/articles/${article.slug}`}
+                >

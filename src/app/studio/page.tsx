@@ -130,3 +130,47 @@ export default async function StudioPage({ searchParams }: Props) {
           <Field name="coverUrl" label="Cover image URL" type="url" />
         </StudioForm>
       ) : null}
+    </div>
+  );
+}
+
+function StudioForm({
+  title,
+  action,
+  children,
+}: {
+  title: string;
+  action: (formData: FormData) => Promise<void>;
+  children: React.ReactNode;
+}) {
+  return (
+    <form className="form-stack panel studio-form" action={action}>
+      <h2 style={{ margin: 0, fontFamily: "var(--font-display)" }}>{title}</h2>
+      {children}
+      <button className="btn btn-primary" type="submit">
+        Publish
+      </button>
+    </form>
+  );
+}
+
+function UniverseSelect({
+  universes,
+}: {
+  universes: { id: string; slug: string; name: string }[];
+}) {
+  return (
+    <label>
+      Universe
+      <select name="universeSlug" required defaultValue="arcane">
+        {universes.map((universe) => (
+          <option key={universe.id} value={universe.slug}>
+            {universe.name}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function Field({

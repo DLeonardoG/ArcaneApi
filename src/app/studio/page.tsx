@@ -86,3 +86,47 @@ export default async function StudioPage({ searchParams }: Props) {
           <Field name="imageUrl" label="Cover image URL" type="url" />
         </StudioForm>
       ) : null}
+
+      {tab === "location" ? (
+        <StudioForm title="New location" action={createLocation}>
+          <UniverseSelect universes={universes} />
+          <Field name="name" label="Name" required />
+          <Field name="slug" label="Slug" required />
+          <Field name="region" label="Region" />
+          <Area name="summary" label="Summary" required />
+          <Area name="description" label="Description" required rows={6} />
+          <Field name="imageUrl" label="Cover image URL" type="url" />
+        </StudioForm>
+      ) : null}
+
+      {tab === "faction" ? (
+        <StudioForm title="New faction" action={createFaction}>
+          <UniverseSelect universes={universes} />
+          <Field name="name" label="Name" required />
+          <Field name="slug" label="Slug" required />
+          <Area name="summary" label="Summary" required />
+          <Area name="description" label="Description" required rows={6} />
+          <Field name="imageUrl" label="Cover image URL" type="url" />
+        </StudioForm>
+      ) : null}
+
+      {tab === "article" ? (
+        <StudioForm title="New article" action={createArticle}>
+          <UniverseSelect universes={universes} />
+          <Field name="title" label="Title" required />
+          <Field name="slug" label="Slug" required />
+          <Area name="summary" label="Summary" required />
+          <Area name="body" label="Body" required rows={10} />
+        </StudioForm>
+      ) : null}
+
+      {tab === "universe" ? (
+        <StudioForm title="New universe" action={createUniverse}>
+          <Field name="name" label="Name" required />
+          <Field name="slug" label="Slug" required />
+          <Field name="tagline" label="Tagline" required />
+          <Area name="description" label="Description" required rows={6} />
+          <Field name="accent" label="Accent color" placeholder="#7dd3c0" />
+          <Field name="coverUrl" label="Cover image URL" type="url" />
+        </StudioForm>
+      ) : null}

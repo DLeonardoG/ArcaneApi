@@ -62,3 +62,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           select: { role: true },
         });
         if (fresh) {
+          token.role = fresh.role;
+        }
+      }
+
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.sub ?? "";
+        session.user.role = (token.role as string) ?? "USER";
+      }
+      return session;
+    },
+  },
+});

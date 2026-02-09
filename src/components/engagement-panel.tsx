@@ -112,3 +112,41 @@ export async function EngagementPanel({
             <label>
               Image URL
               <input name="url" type="url" placeholder="https://..." />
+            </label>
+            <label>
+              Or upload file
+              <input name="file" type="file" accept="image/*" />
+            </label>
+            <label>
+              Alt text
+              <input name="alt" maxLength={160} />
+            </label>
+            <label>
+              Caption
+              <input name="caption" maxLength={280} />
+            </label>
+            <label className="checkbox-row">
+              <input name="isCover" type="checkbox" />
+              Set as cover
+            </label>
+            <button className="btn btn-primary" type="submit">
+              Upload image
+            </button>
+          </form>
+        ) : userId ? (
+          <p className="muted">
+            Image uploads are reserved for editors. Request editor access from
+            your profile.
+          </p>
+        ) : null}
+      </div>
+
+      <div className="comments">
+        <h3>Comments</h3>
+        {userId ? (
+          <form className="form-stack" action={addComment}>
+            <input type="hidden" name="targetType" value={targetType} />
+            <input type="hidden" name="targetId" value={targetId} />
+            <input type="hidden" name="path" value={path} />
+            <label>
+              Add a comment

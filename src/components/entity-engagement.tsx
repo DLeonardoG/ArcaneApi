@@ -12,3 +12,10 @@ export async function EntityEngagement({
 }: {
   targetType: FavoriteTarget;
   targetId: string;
+  universeId?: string;
+  path: string;
+  coverUrl?: string | null;
+}) {
+  const session = await auth();
+
+  return (

@@ -150,3 +150,36 @@ export async function EngagementPanel({
             <input type="hidden" name="path" value={path} />
             <label>
               Add a comment
+              <textarea name="body" required minLength={2} maxLength={2000} rows={3} />
+            </label>
+            <button className="btn btn-primary" type="submit">
+              Post comment
+            </button>
+          </form>
+        ) : null}
+
+        <ul className="comment-list">
+          {engagement.comments.map((comment) => (
+            <li key={comment.id} className="comment-item">
+              <div className="comment-item__meta">
+                <strong>{comment.user.name ?? "Fan"}</strong>
+                <span>{comment.createdAt.toLocaleString()}</span>
+              </div>
+              <p>{comment.body}</p>
+              {userId &&
+              (userId === comment.userId || canEditCover) ? (
+                <form
+                  action={deleteComment.bind(null, comment.id, path)}
+                >
+                  <button type="submit" className="link-button">
+                    Delete
+                  </button>
+                </form>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}

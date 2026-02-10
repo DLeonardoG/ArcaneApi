@@ -5,3 +5,10 @@ import { canUploadMedia } from "@/lib/permissions";
 
 export async function EntityEngagement({
   targetType,
+  targetId,
+  universeId,
+  path,
+  coverUrl,
+}: {
+  targetType: FavoriteTarget;
+  targetId: string;

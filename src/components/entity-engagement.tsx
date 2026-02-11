@@ -26,3 +26,7 @@ export async function EntityEngagement({
       path={path}
       userId={session?.user?.id}
       canEditCover={canUploadMedia(session?.user?.role)}
+      coverUrl={coverUrl}
+    />
+  );
+}

@@ -18,3 +18,13 @@ export async function SiteHeader() {
         <Link href="/" className="brand">
           LoreVault
         </Link>
+        <nav className="nav">
+          <Link href="/universes">Universes</Link>
+          <Link href="/search">Search</Link>
+          {session?.user ? (
+            <>
+              <Link href="/profile">Profile</Link>
+              {canPublish(session.user.role) ? (
+                <Link href="/studio">Studio</Link>
+              ) : null}
+              {canAccessAdmin(session.user.role) ? (

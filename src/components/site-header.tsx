@@ -28,3 +28,13 @@ export async function SiteHeader() {
                 <Link href="/studio">Studio</Link>
               ) : null}
               {canAccessAdmin(session.user.role) ? (
+                <Link href="/admin">Admin</Link>
+              ) : null}
+              <LogoutButton />
+            </>
+          ) : (
+            <>
+              <Link href="/login">Sign in</Link>
+              <Link href="/register" className="nav-cta">
+                Join
+              </Link>

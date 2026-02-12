@@ -8,3 +8,13 @@ export async function SiteHeader() {
   let session: Session | null = null;
   try {
     session = await auth();
+  } catch {
+    session = null;
+  }
+
+  return (
+    <header className="site-header">
+      <div className="site-header__inner">
+        <Link href="/" className="brand">
+          LoreVault
+        </Link>

@@ -38,3 +38,10 @@ export async function SiteHeader() {
               <Link href="/register" className="nav-cta">
                 Join
               </Link>
+            </>
+          )}
+        </nav>
+      </div>
+    </header>
+  );
+}

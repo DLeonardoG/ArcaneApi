@@ -50,3 +50,15 @@ export async function deleteComment(
 ): Promise<void> {
   void formData;
   const session = await auth();
+  if (!session?.user?.id) return;
+
+  const comment = await prisma.comment.findUnique({ where: { id: commentId } });
+  if (!comment) return;
+
+  const isOwner = comment.userId === session.user.id;
+  const isStaff = canModerateComments(session.user.role);
+  if (!isOwner && !isStaff) return;
+
+  await prisma.comment.delete({ where: { id: commentId } });
+  revalidatePath(path);
+}

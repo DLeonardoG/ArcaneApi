@@ -37,3 +37,16 @@ export async function addComment(formData: FormData): Promise<void> {
       targetType: parsed.data.targetType,
       targetId: parsed.data.targetId,
       body: parsed.data.body,
+    },
+  });
+
+  revalidatePath(parsed.data.path);
+}
+
+export async function deleteComment(
+  commentId: string,
+  path: string,
+  formData?: FormData,
+): Promise<void> {
+  void formData;
+  const session = await auth();

@@ -56,3 +56,32 @@ export async function addMediaAsset(formData: FormData): Promise<void> {
   const parsed = mediaSchema.safeParse({
     targetType: formData.get("targetType"),
     targetId: formData.get("targetId"),
+    universeId: formData.get("universeId") || undefined,
+    url: formData.get("url") || undefined,
+    alt: formData.get("alt") || undefined,
+    caption: formData.get("caption") || undefined,
+    isCover:
+      formData.get("isCover") === "on" || formData.get("isCover") === "true",
+    path: formData.get("path"),
+  });
+
+  if (!parsed.success) {
+    throw new Error("Invalid media fields.");
+  }
+
+  const url = await resolveUploadUrl(formData, parsed.data.url);
+
+  if (parsed.data.isCover) {
+    await prisma.mediaAsset.updateMany({
+      where: {
+        targetType: parsed.data.targetType,
+        targetId: parsed.data.targetId,
+        isCover: true,
+      },
+      data: { isCover: false },
+    });
+
+    await setEntityCover(parsed.data.targetType, parsed.data.targetId, url);
+  }
+
+  await prisma.mediaAsset.create({

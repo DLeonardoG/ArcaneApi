@@ -58,3 +58,33 @@ export async function submitRoleRequest(formData: FormData): Promise<void> {
   });
 
   revalidatePath("/profile");
+  revalidatePath("/admin");
+}
+
+export async function reviewRoleRequest(formData: FormData): Promise<void> {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Sign in required.");
+
+  const requestId = String(formData.get("requestId") ?? "");
+  const decision = String(formData.get("decision") ?? "");
+  const reviewNote = String(formData.get("reviewNote") ?? "").trim() || null;
+
+  if (!requestId || (decision !== "APPROVED" && decision !== "REJECTED")) {
+    throw new Error("Invalid review payload.");
+  }
+
+  const request = await prisma.roleRequest.findUnique({
+    where: { id: requestId },
+    include: { user: true },
+  });
+  if (!request || request.status !== "PENDING") {
+    throw new Error("Request not found or already reviewed.");
+  }
+
+  if (!canReviewRequest(session.user.role, request.requestedRole)) {
+    throw new Error("You cannot review this request.");
+  }
+
+  if (decision === "APPROVED") {
+    const nextRole = request.requestedRole as Role;
+    if (

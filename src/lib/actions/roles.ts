@@ -28,3 +28,33 @@ export async function submitRoleRequest(formData: FormData): Promise<void> {
   if (!parsed.success) {
     throw new Error("Write a short pitch (20–1000 chars) and pick a role.");
   }
+
+  const me = await prisma.user.findUniqueOrThrow({
+    where: { id: session.user.id },
+  });
+  const current = asRole(me.role);
+
+  if (parsed.data.requestedRole === "EDITOR" && current !== "USER") {
+    throw new Error("Only regular users can request editor access.");
+  }
+  if (parsed.data.requestedRole === "ADMIN" && current !== "EDITOR") {
+    throw new Error("Only editors can request admin access.");
+  }
+
+  const pending = await prisma.roleRequest.findFirst({
+    where: { userId: me.id, status: "PENDING" },
+  });
+  if (pending) {
+    throw new Error("You already have a pending request.");
+  }
+
+  await prisma.roleRequest.create({
+    data: {
+      userId: me.id,
+      requestedRole: parsed.data.requestedRole as RequestableRole,
+      message: parsed.data.message,
+      status: "PENDING",
+    },
+  });
+
+  revalidatePath("/profile");

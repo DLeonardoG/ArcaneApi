@@ -117,3 +117,33 @@ export async function reviewRoleRequest(formData: FormData): Promise<void> {
       },
     });
   }
+
+  revalidatePath("/admin");
+  revalidatePath("/profile");
+}
+
+export async function setUserRole(formData: FormData): Promise<void> {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Sign in required.");
+
+  const userId = String(formData.get("userId") ?? "");
+  const nextRole = asRole(String(formData.get("role") ?? "USER"));
+
+  const target = await prisma.user.findUnique({ where: { id: userId } });
+  if (!target) throw new Error("User not found.");
+
+  if (!canSetUserRole(session.user.role, target.role, nextRole)) {
+    throw new Error("You cannot set that role.");
+  }
+
+  if (target.id === session.user.id && nextRole !== asRole(target.role)) {
+    throw new Error("You cannot change your own role here.");
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { role: nextRole },
+  });
+
+  revalidatePath("/admin");
+}

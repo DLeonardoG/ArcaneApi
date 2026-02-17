@@ -88,3 +88,32 @@ export async function reviewRoleRequest(formData: FormData): Promise<void> {
   if (decision === "APPROVED") {
     const nextRole = request.requestedRole as Role;
     if (
+      !canSetUserRole(session.user.role, request.user.role, nextRole as AppRole)
+    ) {
+      throw new Error("You cannot assign that role.");
+    }
+
+    await prisma.$transaction([
+      prisma.roleRequest.update({
+        where: { id: request.id },
+        data: {
+          status: "APPROVED",
+          reviewedById: session.user.id,
+          reviewNote,
+        },
+      }),
+      prisma.user.update({
+        where: { id: request.userId },
+        data: { role: nextRole },
+      }),
+    ]);
+  } else {
+    await prisma.roleRequest.update({
+      where: { id: request.id },
+      data: {
+        status: "REJECTED",
+        reviewedById: session.user.id,
+        reviewNote,
+      },
+    });
+  }

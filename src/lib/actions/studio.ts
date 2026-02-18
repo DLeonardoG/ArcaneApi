@@ -121,3 +121,44 @@ export async function createLocation(formData: FormData): Promise<void> {
   }
 
   const universe = await universeIdFromSlug(universeSlug);
+  await prisma.location.create({
+    data: {
+      universeId: universe.id,
+      name,
+      slug,
+      region,
+      summary,
+      description,
+      imageUrl,
+    },
+  });
+
+  revalidatePath(`/u/${universe.slug}`);
+  redirect(`/u/${universe.slug}/locations/${slug}`);
+}
+
+export async function createFaction(formData: FormData): Promise<void> {
+  const session = await auth();
+  requireEditor(session?.user?.role);
+
+  const universeSlug = String(formData.get("universeSlug") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
+  const slug = String(formData.get("slug") ?? "").trim();
+  const summary = String(formData.get("summary") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+  const imageUrl = String(formData.get("imageUrl") ?? "").trim() || null;
+
+  if (!name || !summary || !description || !slugSchema.safeParse(slug).success) {
+    throw new Error("Invalid faction fields.");
+  }
+
+  const universe = await universeIdFromSlug(universeSlug);
+  await prisma.faction.create({
+    data: {
+      universeId: universe.id,
+      name,
+      slug,
+      summary,
+      description,
+      imageUrl,
+    },

@@ -80,3 +80,44 @@ export async function createEpisode(formData: FormData): Promise<void> {
     !title ||
     !synopsis ||
     !slugSchema.safeParse(slug).success ||
+    !Number.isFinite(season) ||
+    !Number.isFinite(number)
+  ) {
+    throw new Error("Invalid episode fields.");
+  }
+
+  const universe = await universeIdFromSlug(universeSlug);
+  await prisma.episode.create({
+    data: {
+      universeId: universe.id,
+      title,
+      slug,
+      season,
+      number,
+      synopsis,
+      airDate,
+      imageUrl,
+    },
+  });
+
+  revalidatePath(`/u/${universe.slug}`);
+  redirect(`/u/${universe.slug}/episodes/${slug}`);
+}
+
+export async function createLocation(formData: FormData): Promise<void> {
+  const session = await auth();
+  requireEditor(session?.user?.role);
+
+  const universeSlug = String(formData.get("universeSlug") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
+  const slug = String(formData.get("slug") ?? "").trim();
+  const region = String(formData.get("region") ?? "").trim() || null;
+  const summary = String(formData.get("summary") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+  const imageUrl = String(formData.get("imageUrl") ?? "").trim() || null;
+
+  if (!name || !summary || !description || !slugSchema.safeParse(slug).success) {
+    throw new Error("Invalid location fields.");
+  }
+
+  const universe = await universeIdFromSlug(universeSlug);

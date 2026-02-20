@@ -31,3 +31,14 @@ export async function getEngagement(
       ? prisma.favorite.findUnique({
           where: {
             userId_targetType_targetId: { userId, targetType, targetId },
+          },
+        })
+      : Promise.resolve(null),
+    prisma.mediaAsset.findMany({
+      where: { targetType, targetId },
+      orderBy: [{ isCover: "desc" }, { createdAt: "desc" }],
+    }),
+  ]);
+
+  return {
+    comments,

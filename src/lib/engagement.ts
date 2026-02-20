@@ -42,3 +42,10 @@ export async function getEngagement(
 
   return {
     comments,
+    averageRating: ratingAgg._avg.score ?? 0,
+    ratingCount: ratingAgg._count.score,
+    userScore: userRating?.score ?? null,
+    isFavorite: Boolean(favorite),
+    media,
+  };
+}

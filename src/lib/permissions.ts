@@ -13,3 +13,18 @@ export function asRole(role?: string | null): AppRole {
     role === "EDITOR" ||
     role === "ADMIN" ||
     role === "SUPER_ADMIN"
+  ) {
+    return role;
+  }
+  return "USER";
+}
+
+export function canPublish(role?: string | null) {
+  return rank[asRole(role)] >= rank.EDITOR;
+}
+
+export function canUploadMedia(role?: string | null) {
+  return canPublish(role);
+}
+
+export function canModerateComments(role?: string | null) {

@@ -28,3 +28,17 @@ export function canUploadMedia(role?: string | null) {
 }
 
 export function canModerateComments(role?: string | null) {
+  return canPublish(role);
+}
+
+export function canAccessAdmin(role?: string | null) {
+  return rank[asRole(role)] >= rank.ADMIN;
+}
+
+export function canModerateRoles(role?: string | null) {
+  return canAccessAdmin(role);
+}
+
+export function canPromoteAdmin(role?: string | null) {
+  return asRole(role) === "SUPER_ADMIN";
+}

@@ -42,3 +42,19 @@ export function canModerateRoles(role?: string | null) {
 export function canPromoteAdmin(role?: string | null) {
   return asRole(role) === "SUPER_ADMIN";
 }
+
+export function canReviewRequest(
+  reviewerRole: string | null | undefined,
+  requestedRole: "EDITOR" | "ADMIN",
+) {
+  if (requestedRole === "ADMIN") {
+    return canPromoteAdmin(reviewerRole);
+  }
+  return canModerateRoles(reviewerRole);
+}
+
+export function canSetUserRole(
+  actorRole: string | null | undefined,
+  targetCurrent: string | null | undefined,
+  nextRole: AppRole,
+) {

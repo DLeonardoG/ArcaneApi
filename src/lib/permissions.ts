@@ -58,3 +58,17 @@ export function canSetUserRole(
   targetCurrent: string | null | undefined,
   nextRole: AppRole,
 ) {
+  const actor = asRole(actorRole);
+  const target = asRole(targetCurrent);
+
+  if (actor === "SUPER_ADMIN") {
+    return nextRole !== "SUPER_ADMIN" || target === "SUPER_ADMIN";
+  }
+
+  if (actor === "ADMIN") {
+    if (target === "ADMIN" || target === "SUPER_ADMIN") return false;
+    return nextRole === "USER" || nextRole === "EDITOR";
+  }
+
+  return false;
+}

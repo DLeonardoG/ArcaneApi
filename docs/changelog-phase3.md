@@ -51,3 +51,4 @@
 - roles polish 49
 - roles polish 50
 - roles polish 51
+- roles polish 52

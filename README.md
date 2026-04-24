@@ -1,4 +1,4 @@
-# LoreVault
+﻿# LoreVault
 
 Fan wiki multi-saga. Arcane is the founding shelf; the schema is ready for every universe you obsess over.
 
@@ -53,12 +53,15 @@ pnpm db:seed
 | `pnpm db:setup` | Push schema + seed |
 | `pnpm history:build` | Generate simulated commit history (phase 1) |
 | `pnpm history:phase2` | Generate phase-2 history (engagement era) |
+| `pnpm history:phase3` | Generate phase-3 history (roles community) |
 
 ## Community features
 
 - Ratings (1–5), comments, favorites on every lore detail page
-- Image gallery + cover URLs; file upload via Vercel Blob when configured
-- **Studio** (`/studio`) for EDITOR/ADMIN to publish new lore
+- Image gallery + cover URLs; uploads restricted to **EDITOR+**
+- **Studio** (`/studio`) for EDITOR+ to publish new lore
+- Role requests from Profile; Admin queue at `/admin` (ADMIN / SUPER_ADMIN)
+- Hierarchy: USER → EDITOR → ADMIN → SUPER_ADMIN
 
 ## Note
 
